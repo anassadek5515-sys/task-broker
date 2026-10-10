@@ -12,7 +12,6 @@
         .task-card { transition: transform 0.2s; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .task-card:hover { transform: translateY(-3px); }
         .nav-pills .nav-link.active { background-color: #0d6efd; }
-        .offerwall-frame { width: 100%; height: 650px; border: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -57,22 +56,12 @@
 
             <!-- قسم شبكات العروض الحقيقية -->
             <div class="tab-pane fade" id="offerwalls">
-                <div class="card p-4 border-0 shadow-sm">
-                    <h4 class="fw-bold mb-3">عروض واستطلاعات الرأي الحقيقية</h4>
-                    <p class="text-muted">شركة CPX Research تعمل الآن بشكل مفعل وحقيقي مع تمرير المعاملات الإلزامية والموصى بها (App ID: 37107)[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span).</p>
+                <div class="card p-5 text-center border-0 shadow-sm">
+                    <h3 class="fw-bold mb-3">استطلاعات الرأي الحقيقية (CPX Research)</h3>
+                    <p class="text-muted mb-4">اضغط على الزر أدناه لفتح صفحة الاستطلاعات والعروض في نافذة مستقلة ومباشرة للبدء في ربح الأموال.</p>
                     
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">اختر شبكة العروض لعرضها:</label>
-                        <select id="offerwallSelector" class="form-select" onchange="changeOfferwall()">
-                            <option value="cpx">CPX Research (مفعّل بـ App ID: 37107)</option>
-                            <option value="bitlabs">BitLabs (تطبيقات وألعاب)</option>
-                            <option value="monlix">Monlix (عروض سريعة)</option>
-                        </select>
-                    </div>
-
-                    <!-- إطار عرض الشركات -->
-                    <div id="offerwallFrameContainer" class="mt-3">
-                        <iframe id="activeOfferwallFrame" class="offerwall-frame" src=""></iframe>
+                    <div>
+                        <button class="btn btn-primary btn-lg fw-bold px-5 py-3 shadow" onclick="openCPXResearch()">🚀 افتح استطلاعات CPX Research الآن</button>
                     </div>
                 </div>
             </div>
@@ -173,7 +162,6 @@
             updateAuthUI();
             loadTasks();
             loadPendingProofs();
-            changeOfferwall();
         });
 
         async function updateAuthUI() {
@@ -275,22 +263,14 @@
             }
         });
 
-        // إدارة شبكات العروض الحقيقية مع الرابط النهائي الصحيح تماماً
-        function changeOfferwall() {
-            const selector = document.getElementById("offerwallSelector").value;
-            const frame = document.getElementById("activeOfferwallFrame");
+        // فتح استطلاعات CPX Research في نافذة جديدة بمعرف المستخدم
+        function openCPXResearch() {
             const subId = currentUser || "guest_user";
-
-            if (selector === "cpx") {
-                const appId = "37107"; //[span_4](start_span)[span_4](end_span)
-                const userId = encodeURIComponent(subId); //[span_5](start_span)[span_5](end_span)
-                // الرابط النهائي والصحيح لشركة CPX Research بدون أخطاء في الـ IP
-                frame.src = `https://oferwall.cpx-research.com/index.php?app_id=37107&ext_user_id=${subId}`;
-            } else if (selector === "bitlabs") {
-                frame.src = `https://web.bitlabs.ai/?token=YOUR_BITLABS_TOKEN&uid=${subId}`;
-            } else if (selector === "monlix") {
-                frame.src = `https://wall.monlix.com/?appid=YOUR_MONLIX_ID&subid_1=${subId}`;
-            }
+            const appId = "37107";
+            const userId = encodeURIComponent(subId);
+            const url = `https://offerwall.cpx-research.com/index.php?app_id=${appId}&ext_user_id=${userId}&username=${userId}`;
+            
+            window.open(url, '_blank');
         }
 
         // لوحة الأدمن
