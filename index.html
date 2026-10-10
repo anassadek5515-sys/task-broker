@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة المهام والعروض الشاملة | Earn Tasks Pro</title>
+    <title>منصة استطلاعات الرأي | Earn Tasks Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .hero-section { background: linear-gradient(135deg, #0d6efd, #6610f2); color: white; padding: 40px 0; }
-        .task-card { transition: transform 0.2s; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .task-card:hover { transform: translateY(-3px); }
-        .nav-pills .nav-link.active { background-color: #0d6efd; }
+        .hero-section { background: linear-gradient(135deg, #0d6efd, #6610f2); color: white; padding: 50px 0; }
     </style>
 </head>
 <body>
@@ -20,7 +17,7 @@
         <div class="container">
             <a class="navbar-brand fw-bold text-primary" href="#">Earn<span class="text-white">Tasks Pro</span></a>
             <div class="d-flex align-items-center">
-                <span class="text-white me-3" id="userBalanceContainer" style="display:none;">💰 رصيدك الحقيقي: <strong class="text-success" id="balanceVal">$0.00</strong></span>
+                <span class="text-white me-3" id="userBalanceContainer" style="display:none;">💰 رصيدك: <strong class="text-success" id="balanceVal">$0.00</strong></span>
                 <button class="btn btn-outline-light btn-sm" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول</button>
             </div>
         </div>
@@ -28,107 +25,19 @@
 
     <div class="hero-section text-center">
         <div class="container">
-            <h1 class="fw-bold mb-2">منصة أرباح المهام والعروض التلقائية</h1>
-            <p class="lead mb-0">اختر المهمة، اقرأ التفاصيل بعناية، أرسل الإثبات، أو استخدم شبكات العروض الحقيقية.</p>
+            <h1 class="fw-bold mb-2">منصة استطلاعات الرأي والأرباح التلقائية</h1>
+            <p class="lead mb-0">أكمل استطلاعات الرأي الحقيقية واكسب المال بكل سهولة وأمان.</p>
         </div>
     </div>
 
-    <div class="container my-4">
-        <!-- التبويبات -->
-        <ul class="nav nav-pills justify-content-center mb-4" id="mainTabs" role="tablist">
-            <li class="nav-item"><button class="nav-link active fw-bold px-3" data-bs-toggle="tab" data-bs-target="#manual-tasks" type="button">📋 المهام المباشرة والإثباتات</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3" data-bs-toggle="tab" data-bs-target="#offerwalls" type="button">🌐 شبكات العروض الحقيقية (CPX Research)</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3 text-danger" data-bs-toggle="tab" data-bs-target="#admin-panel" type="button">⚙️ لوحة إدارة المراجعات</button></li>
-        </ul>
-
-        <div class="tab-content" id="mainTabsContent">
+    <div class="container my-5">
+        <!-- قسم شبكات العروض الحقيقية -->
+        <div class="card p-5 text-center border-0 shadow-sm">
+            <h3 class="fw-bold mb-3">استطلاعات الرأي الحقيقية (CPX Research)</h3>
+            <p class="text-muted mb-4">اضغط على الزر أدناه لفتح صفحة الاستطلاعات والعروض في نافذة مستقلة ومباشرة للبدء في ربح الأموال.</p>
             
-            <!-- قسم المهام اليدوية -->
-            <div class="tab-pane fade show active" id="manual-tasks">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="fw-bold">قائمة المهام المتاحة</h4>
-                    <button class="btn btn-outline-primary btn-sm" onclick="loadTasks()">🔄 تحديث</button>
-                </div>
-                <div class="row g-4" id="tasksContainer">
-                    <div class="text-center text-muted py-5">جاري جلب المهام...</div>
-                </div>
-            </div>
-
-            <!-- قسم شبكات العروض الحقيقية -->
-            <div class="tab-pane fade" id="offerwalls">
-                <div class="card p-5 text-center border-0 shadow-sm">
-                    <h3 class="fw-bold mb-3">استطلاعات الرأي الحقيقية (CPX Research)</h3>
-                    <p class="text-muted mb-4">اضغط على الزر أدناه لفتح صفحة الاستطلاعات والعروض في نافذة مستقلة ومباشرة للبدء في ربح الأموال.</p>
-                    
-                    <div>
-                        <button class="btn btn-primary btn-lg fw-bold px-5 py-3 shadow" onclick="openCPXResearch()">🚀 افتح استطلاعات CPX Research الآن</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- لوحة إدارة المراجعات والأدمن -->
-            <div class="tab-pane fade" id="admin-panel">
-                <div class="card p-3 border-0 shadow-sm mb-4">
-                    <h5 class="fw-bold text-dark mb-3">➕ نشر مهمة جديدة للمستخدمين</h5>
-                    <form id="addTaskForm" class="row g-2">
-                        <div class="col-md-3"><input type="text" id="taskTitle" class="form-control form-control-sm" placeholder="عنوان المهمة" required></div>
-                        <div class="col-md-3"><input type="text" id="taskCompany" class="form-control form-control-sm" placeholder="الشركة / المصدر" required></div>
-                        <div class="col-md-2"><input type="number" step="0.01" id="taskReward" class="form-control form-control-sm" placeholder="العائد ($)" required></div>
-                        <div class="col-md-4"><button type="submit" class="btn btn-dark btn-sm w-100">نشر المهمة</button></div>
-                        <div class="col-12 mt-2">
-                            <textarea id="taskDesc" class="form-control form-control-sm" placeholder="تفاصيل وشروط المهمة بدقة" rows="2" required></textarea>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="card p-3 border-0 shadow-sm">
-                    <h5 class="fw-bold text-dark mb-3">📩 إثباتات المهام المنتظرة لمراجعتك</h5>
-                    <div id="pendingProofsContainer">
-                        <div class="text-center text-muted py-3">جاري جلب الإثباتات...</div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Modal تفاصيل المهمة -->
-    <div class="modal fade" id="taskDetailsModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold" id="modalTaskTitle">تفاصيل المهمة</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="text-muted small">المصدر: <span id="modalTaskCompany" class="fw-bold text-dark"></span> | المكافأة: <span class="badge bg-success" id="modalTaskReward"></span></p>
-                    <hr>
-                    <h6 class="fw-bold text-primary">شروط وتفاصيل التنفيذ:</h6>
-                    <p id="modalTaskDesc" class="p-3 bg-light rounded border"></p>
-                    <button class="btn btn-success w-100 fw-bold mt-2" onclick="proceedToProof()">تنفيذ المهمة ورفع الإثبات الآن</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal تقديم الإثبات -->
-    <div class="modal fade" id="proofModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold">إرسال إثبات تنفيذ المهمة</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="submitProofForm">
-                        <input type="hidden" id="selectedTaskId">
-                        <div class="mb-3">
-                            <label class="form-label">اكتب تفاصيل الإثبات بدقة:</label>
-                            <textarea id="proofText" class="form-control" rows="3" required placeholder="مثال: تم التفاعل بحسابي..."></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 fw-bold">إرسال الإثبات للمراجعة</button>
-                    </form>
-                </div>
+            <div>
+                <button class="btn btn-primary btn-lg fw-bold px-5 py-3 shadow" onclick="openCPXResearch()">🚀 افتح استطلاعات CPX Research الآن</button>
             </div>
         </div>
     </div>
@@ -156,12 +65,9 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentUser = localStorage.getItem("currentUser") || null;
-        let activeTaskIdForProof = null;
 
         document.addEventListener("DOMContentLoaded", function() {
             updateAuthUI();
-            loadTasks();
-            loadPendingProofs();
         });
 
         async function updateAuthUI() {
@@ -189,81 +95,7 @@
             bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
         });
 
-        // جلب المهام
-        async function loadTasks() {
-            const container = document.getElementById("tasksContainer");
-            container.innerHTML = `<div class="text-center text-muted py-5">جاري جلب المهام...</div>`;
-            
-            const { data } = await supabaseClient.from("tasks").select("*").order("id", { ascending: false });
-
-            if (!data || data.length === 0) {
-                container.innerHTML = `<div class="text-center text-muted py-5">لا توجد مهام حالياً.</div>`;
-                return;
-            }
-
-            container.innerHTML = "";
-            data.forEach(task => {
-                container.innerHTML += `
-                    <div class="col-md-4">
-                        <div class="card task-card p-3 h-100 d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="badge bg-secondary">${task.company_name || 'شركة معتمدة'}</span>
-                                    <span class="badge bg-success">+$${task.reward}</span>
-                                </div>
-                                <h5 class="fw-bold">${task.title}</h5>
-                                <p class="text-muted small">${task.description ? task.description.substring(0, 80) + '...' : 'اضغط لعرض تفاصيل وشروط المهمة'}</p>
-                            </div>
-                            <button class="btn btn-outline-primary w-100 mt-3" onclick="showTaskDetails(${task.id}, '${task.title}', '${task.company_name}', ${task.reward}, '${task.description || 'لا توجد تفاصيل إضافية'}')">عرض التفاصيل والتنفيذ</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function showTaskDetails(id, title, company, reward, desc) {
-            activeTaskIdForProof = id;
-            document.getElementById("modalTaskTitle").innerText = title;
-            document.getElementById("modalTaskCompany").innerText = company;
-            document.getElementById("modalTaskReward").innerText = "$" + reward;
-            document.getElementById("modalTaskDesc").innerText = desc;
-            
-            new bootstrap.Modal(document.getElementById('taskDetailsModal')).show();
-        }
-
-        function proceedToProof() {
-            if (!currentUser) {
-                alert("يرجى تسجيل الدخول أولاً لتنفيذ المهمة!");
-                return;
-            }
-            bootstrap.Modal.getInstance(document.getElementById('taskDetailsModal')).hide();
-            document.getElementById("selectedTaskId").value = activeTaskIdForProof;
-            new bootstrap.Modal(document.getElementById('proofModal')).show();
-        }
-
-        document.getElementById("submitProofForm").addEventListener("submit", async function(e) {
-            e.preventDefault();
-            const taskId = document.getElementById("selectedTaskId").value;
-            const proof = document.getElementById("proofText").value;
-
-            const { error } = await supabaseClient.from("task_proofs").insert([{
-                username: currentUser,
-                task_id: taskId,
-                proof_text: proof,
-                status: 'pending'
-            }]);
-
-            if (error) {
-                alert("خطأ: " + error.message);
-            } else {
-                alert("تم إرسال إثباتك بنجاح! سيتم مراجعته وإضافة الرصيد قريباً.");
-                document.getElementById("submitProofForm").reset();
-                bootstrap.Modal.getInstance(document.getElementById('proofModal')).hide();
-                loadPendingProofs();
-            }
-        });
-
-        // فتح استطلاعات CPX Research بالدومين الصحيح offers.cpx-research.com
+        // فتح استطلاعات CPX Research بالدومين الصحيح
         function openCPXResearch() {
             const subId = currentUser || "guest_user";
             const appId = "37107";
@@ -272,54 +104,6 @@
             
             window.open(url, '_blank');
         }
-
-        // لوحة الأدمن
-        async function loadPendingProofs() {
-            const container = document.getElementById("pendingProofsContainer");
-            const { data } = await supabaseClient.from("task_proofs").select("*, tasks(title, reward)").eq("status", "pending");
-
-            if (!data || data.length === 0) {
-                container.innerHTML = `<div class="text-center text-muted py-3">لا توجد إثباتات جديدة معلقة.</div>`;
-                return;
-            }
-
-            container.innerHTML = "";
-            data.forEach(item => {
-                container.innerHTML += `
-                    <div class="border rounded p-3 mb-2 bg-light d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>المستخدم:</strong> ${item.username} | <strong>المهمة:</strong> ${item.tasks ? item.tasks.title : 'مهمة'} | <strong>المكافأة:</strong> $${item.tasks ? item.tasks.reward : 0}<br>
-                            <small class="text-primary"><strong>الإثبات:</strong> ${item.proof_text}</small>
-                        </div>
-                        <button class="btn btn-success btn-sm" onclick="approveProof(${item.id}, '${item.username}', ${item.tasks ? item.tasks.reward : 0})">موافقة وإضافة الرصيد</button>
-                    </div>
-                `;
-            });
-        }
-
-        async function approveProof(proofId, username, reward) {
-            await supabaseClient.from("task_proofs").update({ status: 'approved' }).eq("id", proofId);
-            const { data: user } = await supabaseClient.from("users").select("balance").eq("username", username).single();
-            const newBalance = (parseFloat(user ? user.balance : 0) + parseFloat(reward)).toFixed(2);
-            await supabaseClient.from("users").update({ balance: newBalance }).eq("username", username);
-
-            alert(`تم اعتماد الإثبات وإضافة $${reward} لرصيد ${username}!`);
-            loadPendingProofs();
-            updateAuthUI();
-        }
-
-        document.getElementById("addTaskForm").addEventListener("submit", async function(e) {
-            e.preventDefault();
-            await supabaseClient.from("tasks").insert([{
-                title: document.getElementById("taskTitle").value,
-                company_name: document.getElementById("taskCompany").value,
-                reward: parseFloat(document.getElementById("taskReward").value),
-                description: document.getElementById("taskDesc").value
-            }]);
-            alert("تم نشر المهمة بنجاح!");
-            document.getElementById("addTaskForm").reset();
-            loadTasks();
-        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
