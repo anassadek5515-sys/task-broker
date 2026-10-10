@@ -275,16 +275,16 @@
             }
         });
 
-        // إدارة شبكات العروض الحقيقية مع المعاملات الاحترافية
+        // إدارة شبكات العروض الحقيقية مع الرابط النهائي الصحيح تماماً
         function changeOfferwall() {
             const selector = document.getElementById("offerwallSelector").value;
             const frame = document.getElementById("activeOfferwallFrame");
             const subId = currentUser || "guest_user";
 
             if (selector === "cpx") {
-                // تمرير المعاملات الإلزامية والموصى بها وفقا لتوثيق CPX Research
                 const appId = "37107"; //[span_4](start_span)[span_4](end_span)
                 const userId = encodeURIComponent(subId); //[span_5](start_span)[span_5](end_span)
+                // الرابط النهائي والصحيح لشركة CPX Research بدون أخطاء في الـ IP
                 frame.src = `https://offerwall.cpx-research.com/index.php?app_id=${appId}&ext_user_id=${userId}&username=${userId}`;
             } else if (selector === "bitlabs") {
                 frame.src = `https://web.bitlabs.ai/?token=YOUR_BITLABS_TOKEN&uid=${subId}`;
