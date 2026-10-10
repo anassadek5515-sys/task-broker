@@ -3,173 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة المهام الشاملة | TaskBroker Global</title>
+    <title>منصة المهام الحقيقية | Earn Tasks Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .hero-section { background: linear-gradient(135deg, #0d6efd, #6610f2); color: white; padding: 60px 0; }
-        .task-card { transition: transform 0.2s, box-shadow 0.2s; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .task-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
-        .company-badge { font-size: 0.75rem; background: #e9ecef; color: #495057; padding: 3px 8px; border-radius: 4px; }
+        .hero-section { background: linear-gradient(135deg, #0d6efd, #6610f2); color: white; padding: 50px 0; }
+        .task-card { transition: transform 0.2s; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .task-card:hover { transform: translateY(-3px); }
+        .nav-pills .nav-link.active { background-color: #0d6efd; }
     </style>
 </head>
 <body>
 
-    <!-- شريط التنقل العلوي -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="#">Task<span class="text-white">Broker Global</span></a>
+            <a class="navbar-brand fw-bold text-primary" href="#">Earn<span class="text-white">Tasks Pro</span></a>
             <div class="d-flex align-items-center">
-                <span class="text-warning me-3 small d-none d-md-inline" id="deviceSpecs">جاري فحص الجهاز...</span>
-                <span class="text-white me-3" id="userBalanceContainer" style="display:none;">💰 الرصيد: <strong class="text-success" id="balanceVal">$0.00</strong></span>
+                <span class="text-white me-3" id="userBalanceContainer" style="display:none;">💰 الرصيد الحقيقي: <strong class="text-success" id="balanceVal">$0.00</strong></span>
                 <button class="btn btn-outline-light btn-sm" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول</button>
             </div>
         </div>
     </nav>
 
-    <!-- الواجهة الترحيبية الكبرى -->
     <div class="hero-section text-center">
         <div class="container">
-            <h1 class="fw-bold mb-3">أضخم شبكة مهام وعروض ربحية</h1>
-            <p class="lead mb-4">نفذ مهام الشركات العالمية، اجمع الأرباح لحظياً، واسحب أرباحك بدون قيود!</p>
-            <button class="btn btn-warning btn-lg fw-bold text-dark px-4" data-bs-toggle="modal" data-bs-target="#authModal">انضم وابدأ الربح</button>
+            <h1 class="fw-bold mb-2">منصة أرباح المهام والشراكات العالمية</h1>
+            <p class="lead mb-0">نفذ المهام الحقيقية، أرسل الإثباتات، أو أكمل العروض المباشرة لتحصل على أرباحك.</p>
         </div>
     </div>
 
-    <!-- لوحة تحكم سريعة للإدارة (تظهر للمسؤول/الكل لإضافة مهام جديدة) -->
     <div class="container my-4">
-        <div class="card p-3 border-0 shadow-sm bg-white">
-            <h5 class="fw-bold text-secondary mb-3">➕ إضافة مهمة جديدة (لوحة الشركات والتحكم)</h5>
-            <form id="addTaskForm" class="row g-3">
-                <div class="col-md-3">
-                    <input type="text" id="taskTitle" class="form-control form-control-sm" placeholder="عنوان المهمة" required>
+        <!-- تبويبات التنقل بين المهام اليدوية وعروض الشركات -->
+        <ul class="nav nav-pills justify-content-center mb-4" id="mainTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active fw-bold px-4" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual-tasks" type="button">📋 المهام المباشرة والإثباتات</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-bold px-4" id="offerwall-tab" data-bs-toggle="tab" data-bs-target="#offerwalls" type="button">🌐 شبكات العروض العالمية (Offerwalls)</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-bold px-4 text-danger" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin-panel" type="button">⚙️ لوحة المراجعة (للأدمن)</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="mainTabsContent">
+            
+            <!-- قسم المهام اليدوية -->
+            <div class="tab-pane fade show active" id="manual-tasks">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="fw-bold">المهام المتاحة للمراجعة</h4>
+                    <button class="btn btn-outline-primary btn-sm" onclick="loadTasks()">🔄 تحديث</button>
                 </div>
-                <div class="col-md-3">
-                    <input type="text" id="taskCompany" class="form-control form-control-sm" placeholder="اسم الشركة / المصدر" required>
+                <div class="row g-4" id="tasksContainer">
+                    <div class="text-center text-muted py-5">جاري جلب المهام...</div>
                 </div>
-                <div class="col-md-2">
-                    <input type="number" step="0.01" id="taskReward" class="form-control form-control-sm" placeholder="العائد ($)" required>
+            </div>
+
+            <!-- قسم شبكات العروض التلقائية (Offerwalls) -->
+            <div class="tab-pane fade" id="offerwalls">
+                <div class="card p-4 border-0 shadow-sm text-center">
+                    <h4 class="fw-bold mb-3">شبكات استطلاعات الرأي والعروض التلقائية</h4>
+                    <p class="text-muted mb-4">يتم ربط مفتاح الـ Iframe / API الخاص بكل شبكة (مثل CPX Research أو BitLabs) هنا لتظهر العروض تلقائياً ويتم تحويل الأرباح عبر الـ Postback تلقائياً دون تدخل يدوي.</p>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-white">
+                                <h5>CPX Research</h5>
+                                <p class="small text-muted">استطلاعات رأي عالمية مرتفعة العائد</p>
+                                <span class="badge bg-warning text-dark">بانتظار مفتاح الـ App ID</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-white">
+                                <h5>BitLabs</h5>
+                                <p class="small text-muted">تحميل تطبيقات وألعاب وتجارب</p>
+                                <span class="badge bg-warning text-dark">بانتظار مفتاح الـ API</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded bg-white">
+                                <h5>Monlix / AdGate</h5>
+                                <p class="small text-muted">عروض سريعة ومحتوى تفاعلي</p>
+                                <span class="badge bg-warning text-dark">جاهز للربط</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-dark btn-sm w-100">نشر المهمة فوراً للجميع</button>
+            </div>
+
+            <!-- لوحة الإدارة لمراجعة الإثباتات وقبولها -->
+            <div class="tab-pane fade" id="admin-panel">
+                <div class="card p-3 border-0 shadow-sm mb-4">
+                    <h5 class="fw-bold text-dark mb-3">➕ إضافة مهمة جديدة للجمهور</h5>
+                    <form id="addTaskForm" class="row g-2">
+                        <div class="col-md-3"><input type="text" id="taskTitle" class="form-control form-control-sm" placeholder="عنوان المهمة" required></div>
+                        <div class="col-md-3"><input type="text" id="taskCompany" class="form-control form-control-sm" placeholder="الشركة / المصدر" required></div>
+                        <div class="col-md-2"><input type="number" step="0.01" id="taskReward" class="form-control form-control-sm" placeholder="العائد ($)" required></div>
+                        <div class="col-md-4"><button type="submit" class="btn btn-dark btn-sm w-100">نشر المهمة</button></div>
+                    </form>
                 </div>
-            </form>
+
+                <div class="card p-3 border-0 shadow-sm">
+                    <h5 class="fw-bold text-dark mb-3">📩 إثباتات المهام المعلقة (تتطلب مراجعتك)</h5>
+                    <div id="pendingProofsContainer">
+                        <div class="text-center text-muted py-3">جاري جلب الإثباتات...</div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- شبكة المهام الديناميكية -->
-    <div class="container my-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold text-dark">المهام والعروض المتاحة حالياً</h3>
-            <button class="btn btn-outline-primary btn-sm" onclick="loadTasks()">🔄 تحديث القائمة</button>
-        </div>
-        <div class="row g-4" id="tasksContainer">
-            <!-- سيتم تحميل المهام ديناميكياً هنا -->
-            <div class="text-center text-muted py-5">جاري جلب المهام من الشركات...</div>
-        </div>
-    </div>
-
-    <!-- نافذة تسجيل الدخول / التسجيل -->
-    <div class="modal fade" id="authModal" tabindex="-1">
+    <!-- Modal تقديم إثبات المهمة -->
+    <div class="modal fade" id="proofModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-bold">حسابك في المنصة</h5>
+                    <h5 class="modal-title fw-bold">تقديم إثبات تنفيذ المهمة</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="registerForm">
+                    <form id="submitProofForm">
+                        <input type="hidden" id="modalTaskId">
                         <div class="mb-3">
-                            <label class="form-label">اسم المستخدم</label>
-                            <input type="text" id="regUser" class="form-control" required>
+                            <label class="form-label">اكتب الإثبات (رابط الحساب / اسم الحساب / تفاصيل الإثبات)</label>
+                            <textarea id="proofText" class="form-control" rows="3" required placeholder="مثال: قمت بالتفاعل بحسابي باسم @myuser ودليل ذلك..."></textarea>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">البريد الإلكتروني</label>
-                            <input type="email" id="regEmail" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">كلمة السر</label>
-                            <input type="password" id="regPass" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold">تسجيل / الدخول للحساب</button>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">إرسال للمراجعة الحقيقية</button>
                     </form>
-                    <div id="formMsg" class="mt-3 text-center small"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- البرمجة والمنطق -->
+    <!-- Modal تسجيل الحساب -->
+    <div class="modal fade" id="authModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title fw-bold">تسجيل الدخول</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="regUser" class="form-control" required></div>
+                        <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="regEmail" class="form-control" required></div>
+                        <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="regPass" class="form-control" required></div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">دخول / تسجيل</button>
+                    </form>
+                    <div id="formMsg" class="mt-2 text-center small"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SUPABASE_URL = "https://fpujbgygrnuqgdnrexcx.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwdWpiZ3lncm51cWdkbnJleGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDA1MDUsImV4cCI6MjEwNzIxNjUwNX0.dmNknj6Sg3MTFGjAcyCHiPTyfTWVeyEPBgEe5oVZGGU";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentUser = localStorage.getItem("currentUser") || null;
-        let currentBalance = parseFloat(localStorage.getItem("currentBalance") || "0.00");
 
         document.addEventListener("DOMContentLoaded", function() {
-            // فحص الجهاز
-            let ram = navigator.deviceMemory ? navigator.deviceMemory + " GB" : "متعدد النواة";
-            let cores = navigator.hardwareConcurrency ? navigator.hardwareConcurrency + " أنوية" : "عادي";
-            document.getElementById("deviceSpecs").innerText = "💻 RAM: " + ram + " | Cores: " + cores;
-
             updateAuthUI();
             loadTasks();
+            loadPendingProofs();
         });
 
-        function updateAuthUI() {
+        async function updateAuthUI() {
             if (currentUser) {
                 document.getElementById("authNavBtn").innerText = currentUser;
                 document.getElementById("userBalanceContainer").style.display = "inline";
-                document.getElementById("balanceValinnerText", "$ " + currentBalance.toFixed(2));
-                document.getElementById("balanceVal").innerText = "$" + currentBalance.toFixed(2);
+                
+                // جلب الرصيد الحقيقي المعتمد من قاعدة البيانات
+                const { data } = await supabaseClient.from("users").select("balance").eq("username", currentUser).single();
+                if (data) {
+                    document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
+                }
             }
         }
 
-        // تسجيل المستخدم أو دخوله
+        // تسجيل الدخول
         document.getElementById("registerForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             const u = document.getElementById("regUser").value;
             const em = document.getElementById("regEmail").value;
             const p = document.getElementById("regPass").value;
-            const msg = document.getElementById("formMsg");
             
-            msg.innerText = "جاري التحقق وحفظ الحساب...";
-            
-            // تحقق إذا كان المستخدم موجوداً أو قم بإضافته
-            const { error } = await supabaseClient
-                .from("users")
-                .insert([{ username: u, email: em, password: p, balance: 0 }]);
-
+            await supabaseClient.from("users").insert([{ username: u, email: em, password: p, balance: 0 }]);
             currentUser = u;
             localStorage.setItem("currentUser", u);
-            msg.style.color = "green";
-            msg.innerText = "تم تسجيل الدخول بنجاح!";
             updateAuthUI();
-            setTimeout(() => {
-                bootstrap.Modal.getInstance(document.getElementById("authModal")).hide();
-            }, 1000);
+            bootstrap.Modal.getInstance(document.getElementById("authModal")).hide();
         });
 
-        // جلب المهام من قاعدة البيانات وعرضها ديناميكياً
+        // جلب المهام المتاحة
         async function loadTasks() {
             const container = document.getElementById("tasksContainer");
-            container.innerHTML = `<div class="text-center text-muted py-5">جاري تحميل العروض والمهام...</div>`;
+            container.innerHTML = `<div class="text-center text-muted py-5">جاري جلب المهام...</div>`;
             
-            const { data, error } = await supabaseClient
-                .from("tasks")
-                .select("*")
-                .order("id", { ascending: false });
-
-            if (error) {
-                container.innerHTML = `<div class="text-danger text-center">خطأ في جلب المهام: ${error.message}</div>`;
-                return;
-            }
+            const { data } = await supabaseClient.from("tasks").select("*").order("id", { ascending: false });
 
             if (!data || data.length === 0) {
-                container.innerHTML = `<div class="text-center text-muted py-5">لا توجد مهام متاحة حالياً. أضف مهمة جديدة بالأعلى!</div>`;
+                container.innerHTML = `<div class="text-center text-muted py-5">لا توجد مهام حالياً.</div>`;
                 return;
             }
 
@@ -180,57 +214,106 @@
                         <div class="card task-card p-3 h-100 d-flex flex-column justify-content-between">
                             <div>
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="company-badge">🏢 ${task.company_name || 'شركة معتمدة'}</span>
+                                    <span class="badge bg-secondary">${task.company_name || 'شركة معتمدة'}</span>
                                     <span class="badge bg-success">+$${task.reward}</span>
                                 </div>
                                 <h5 class="fw-bold">${task.title}</h5>
-                                <p class="text-muted small">${task.description || 'أتمم المهمة المطلوبة واحصل على مكافأتك الفورية في رصيدك.'}</p>
+                                <p class="text-muted small">${task.description || 'قم بإكمال المهمة وإرسال إثباتك لمراجعته وتحويل الرصيد.'}</p>
                             </div>
-                            <button class="btn btn-outline-primary w-100 mt-3" onclick="completeTask(${task.id}, ${task.reward})">تنفيذ المهمة وكسب العائد</button>
+                            <button class="btn btn-primary w-100 mt-3" onclick="openProofModal(${task.id})">نفذ وتقديم الإثبات</button>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // إضافة مهمة جديدة عبر لوحة التحكم المصغرة
+        function openProofModal(taskId) {
+            if (!currentUser) {
+                alert("يرجى تسجيل الدخول أولاً!");
+                return;
+            }
+            document.getElementById("modalTaskId").value = taskId;
+            new bootstrap.Modal(document.getElementById('proofModal')).show();
+        }
+
+        // تقديم الإثبات الحقيقي
+        document.getElementById("submitProofForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const taskId = document.getElementById("modalTaskId").value;
+            const proof = document.getElementById("proofText").value;
+
+            const { error } = await supabaseClient.from("task_proofs").insert([{
+                username: currentUser,
+                task_id: taskId,
+                proof_text: proof,
+                status: 'pending'
+            }]);
+
+            if (error) {
+                alert("خطأ أثناء الإرسال: " + error.message);
+            } else {
+                alert("تم إرسال إثباتك بنجاح! هو الآن قيد المراجعة في لوحة الإدارة وسوف يضاف الرصيد فور الموافقة.");
+                document.getElementById("submitProofForm").reset();
+                bootstrap.Modal.getInstance(document.getElementById('proofModal')).hide();
+                loadPendingProofs();
+            }
+        });
+
+        // لوحة الإدارة: جلب الإثباتات المعلقة
+        async function loadPendingProofs() {
+            const container = document.getElementById("pendingProofsContainer");
+            const { data, error } = await supabaseClient.from("task_proofs").select("*, tasks(title, reward)").eq("status", "pending");
+
+            if (!data || data.length === 0) {
+                container.innerHTML = `<div class="text-center text-muted py-3">لا توجد إثباتات جديدة تنتظر المراجعة.</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            data.forEach(item => {
+                container.innerHTML += `
+                    <div class="border rounded p-3 mb-2 bg-light d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>المستخدم:</strong> ${item.username} | <strong>المهمة:</strong> ${item.tasks ? item.tasks.title : 'مهمة'} | <strong>المكافأة:</strong> $${item.tasks ? item.tasks.reward : 0}<br>
+                            <small class="text-primary"><strong>الإثبات المرفوع:</strong> ${item.proof_text}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-sm me-1" onclick="approveProof(${item.id}, '${item.username}', ${item.tasks ? item.tasks.reward : 0})">موافقة وإضافة الرصيد</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // لوحة الإدارة: قبول الإثبات وتحويل الرصيد الحقيقي للمستخدم
+        async function approveProof(proofId, username, reward) {
+            // 1. تحديث حالة الإثبات إلى مقبول
+            await supabaseClient.from("task_proofs").update({ status: 'approved' }).eq("id", proofId);
+
+            // 2. جلب رصيد المستخدم الحالي وزيادته
+            const { data: user } = await supabaseClient.from("users").select("balance").eq("username", username).single();
+            const newBalance = (parseFloat(user ? user.balance : 0) + parseFloat(reward)).toFixed(2);
+
+            // 3. تحديث رصيد المستخدم في قاعدة البيانات
+            await supabaseClient.from("users").update({ balance: newBalance }).eq("username", username);
+
+            alert(`تم قبول الإثبات وإضافة $${reward} لرصيد المستخدم ${username} بنجاح!`);
+            loadPendingProofs();
+            updateAuthUI();
+        }
+
+        // إضافة مهمة جديدة
         document.getElementById("addTaskForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             const title = document.getElementById("taskTitle").value;
             const company = document.getElementById("taskCompany").value;
             const reward = parseFloat(document.getElementById("taskReward").value);
 
-            const { error } = await supabaseClient
-                .from("tasks")
-                .insert([{ title: title, company_name: company, reward: reward, description: "مهمة حصرية مقدمة من الشبكة." }]);
-
-            if (error) {
-                alert("خطأ أثناء نشر المهمة: " + error.message);
-            } else {
-                alert("تم نشر المهمة بنجاح لتظهر لجميع المستخدمين!");
-                document.getElementById("addTaskForm").reset();
-                loadTasks();
-            }
+            await supabaseClient.from("tasks").insert([{ title: title, company_name: company, reward: reward }]);
+            alert("تم نشر المهمة!");
+            document.getElementById("addTaskForm").reset();
+            loadTasks();
         });
-
-        // تنفيذ المهمة وإضافة الرصيد للمستخدم
-        async function completeTask(taskId, reward) {
-            if (!currentUser) {
-                alert("يرجى تسجيل الدخول أولاً لتتمكن من تنفيذ المهام وتحصيل أرباحك!");
-                var myModal = new bootstrap.Modal(document.getElementById('authModal'));
-                myModal.show();
-                return;
-            }
-
-            currentBalance += reward;
-            localStorage.setItem("currentBalance", currentBalance);
-            updateAuthUI();
-
-            // حفظ إنجاز المهمة في قاعدة البيانات
-            await supabaseClient.from("user_tasks").insert([{ username: currentUser, task_id: taskId }]);
-
-            alert(`🎉 مبروك يا ${currentUser}! تم إتمام المهمة بنجاح وإضافة $${reward} إلى رصيدك الفوري.`);
-        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
