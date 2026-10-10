@@ -38,7 +38,7 @@
         <!-- التبويبات -->
         <ul class="nav nav-pills justify-content-center mb-4" id="mainTabs" role="tablist">
             <li class="nav-item"><button class="nav-link active fw-bold px-3" data-bs-toggle="tab" data-bs-target="#manual-tasks" type="button">📋 المهام المباشرة والإثباتات</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3" data-bs-toggle="tab" data-bs-target="#offerwalls" type="button">🌐 شبكات العروض الحقيقية (CPX Research & Offerwalls)</button></li>
+            <li class="nav-item"><button class="nav-link fw-bold px-3" data-bs-toggle="tab" data-bs-target="#offerwalls" type="button">🌐 شبكات العروض الحقيقية (CPX Research)</button></li>
             <li class="nav-item"><button class="nav-link fw-bold px-3 text-danger" data-bs-toggle="tab" data-bs-target="#admin-panel" type="button">⚙️ لوحة إدارة المراجعات</button></li>
         </ul>
 
@@ -59,7 +59,7 @@
             <div class="tab-pane fade" id="offerwalls">
                 <div class="card p-4 border-0 shadow-sm">
                     <h4 class="fw-bold mb-3">عروض واستطلاعات الرأي الحقيقية</h4>
-                    <p class="text-muted">شركة CPX Research تعمل الآن بشكل مفعل وحقيقي بـ App ID الخاص بك (37107).</p>
+                    <p class="text-muted">شركة CPX Research تعمل الآن بشكل مفعل وحقيقي مع تمرير المعاملات الإلزامية والموصى بها (App ID: 37107)[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span).</p>
                     
                     <div class="mb-3">
                         <label class="form-label fw-bold">اختر شبكة العروض لعرضها:</label>
@@ -87,7 +87,7 @@
                         <div class="col-md-2"><input type="number" step="0.01" id="taskReward" class="form-control form-control-sm" placeholder="العائد ($)" required></div>
                         <div class="col-md-4"><button type="submit" class="btn btn-dark btn-sm w-100">نشر المهمة</button></div>
                         <div class="col-12 mt-2">
-                            <textarea id="taskDesc" class="form-control form-control-sm" placeholder="تفاصيل وشروط المهمة بدقة (ما المطلوب من المستخدم فعله؟)" rows="2" required></textarea>
+                            <textarea id="taskDesc" class="form-control form-control-sm" placeholder="تفاصيل وشروط المهمة بدقة" rows="2" required></textarea>
                         </div>
                     </form>
                 </div>
@@ -134,8 +134,8 @@
                     <form id="submitProofForm">
                         <input type="hidden" id="selectedTaskId">
                         <div class="mb-3">
-                            <label class="form-label">اكتب تفاصيل الإثبات بدقة (اسم المستخدم لديك، رابط الحساب، أو لقطة الشاشة):</label>
-                            <textarea id="proofText" class="form-control" rows="3" required placeholder="مثال: تم التفاعل بحسابي @username ودليل التنفيذ هو..."></textarea>
+                            <label class="form-label">اكتب تفاصيل الإثبات بدقة:</label>
+                            <textarea id="proofText" class="form-control" rows="3" required placeholder="مثال: تم التفاعل بحسابي..."></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary w-100 fw-bold">إرسال الإثبات للمراجعة</button>
                     </form>
@@ -275,15 +275,17 @@
             }
         });
 
-        // إدارة شبكات العروض الحقيقية
+        // إدارة شبكات العروض الحقيقية مع المعاملات الاحترافية
         function changeOfferwall() {
             const selector = document.getElementById("offerwallSelector").value;
             const frame = document.getElementById("activeOfferwallFrame");
             const subId = currentUser || "guest_user";
 
             if (selector === "cpx") {
-                // استخدام رقم App ID الخاص بك المعتمد 37107
-                frame.src = `https://offerwall.cpx-research.com/index.php?app_id=37107&ext_user_id=${subId}`;
+                // تمرير المعاملات الإلزامية والموصى بها وفقا لتوثيق CPX Research
+                const appId = "37107"; //[span_4](start_span)[span_4](end_span)
+                const userId = encodeURIComponent(subId); //[span_5](start_span)[span_5](end_span)
+                frame.src = `https://offerwall.cpx-research.com/index.php?app_id=${appId}&ext_user_id=${userId}&username=${userId}`;
             } else if (selector === "bitlabs") {
                 frame.src = `https://web.bitlabs.ai/?token=YOUR_BITLABS_TOKEN&uid=${subId}`;
             } else if (selector === "monlix") {
