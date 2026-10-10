@@ -263,12 +263,12 @@
             }
         });
 
-        // فتح استطلاعات CPX Research في نافذة جديدة بمعرف المستخدم
+        // فتح استطلاعات CPX Research بالدومين الصحيح offers.cpx-research.com
         function openCPXResearch() {
             const subId = currentUser || "guest_user";
             const appId = "37107";
             const userId = encodeURIComponent(subId);
-            const url = `https://offerwall.cpx-research.com/index.php?app_id=${appId}&ext_user_id=${userId}&username=${userId}`;
+            const url = `https://offers.cpx-research.com/index.php?app_id=${appId}&ext_user_id=${userId}&username=${userId}`;
             
             window.open(url, '_blank');
         }
