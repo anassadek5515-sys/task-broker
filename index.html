@@ -12,7 +12,7 @@
         .task-card { transition: transform 0.2s; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .task-card:hover { transform: translateY(-3px); }
         .nav-pills .nav-link.active { background-color: #0d6efd; }
-        .offerwall-frame { width: 100%; height: 600px; border: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .offerwall-frame { width: 100%; height: 650px; border: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
@@ -38,7 +38,7 @@
         <!-- التبويبات -->
         <ul class="nav nav-pills justify-content-center mb-4" id="mainTabs" role="tablist">
             <li class="nav-item"><button class="nav-link active fw-bold px-3" data-bs-toggle="tab" data-bs-target="#manual-tasks" type="button">📋 المهام المباشرة والإثباتات</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3" data-bs-toggle="tab" data-bs-target="#offerwalls" type="button">🌐 شبكات العروض الحقيقية (API & Offerwalls)</button></li>
+            <li class="nav-item"><button class="nav-link fw-bold px-3" data-bs-toggle="tab" data-bs-target="#offerwalls" type="button">🌐 شبكات العروض الحقيقية (CPX Research & Offerwalls)</button></li>
             <li class="nav-item"><button class="nav-link fw-bold px-3 text-danger" data-bs-toggle="tab" data-bs-target="#admin-panel" type="button">⚙️ لوحة إدارة المراجعات</button></li>
         </ul>
 
@@ -55,22 +55,22 @@
                 </div>
             </div>
 
-            <!-- قسم شبكات العروض الحقيقية والـ API -->
+            <!-- قسم شبكات العروض الحقيقية -->
             <div class="tab-pane fade" id="offerwalls">
                 <div class="card p-4 border-0 shadow-sm">
-                    <h4 class="fw-bold mb-3">ربط وعرض شركات العروض الخارجية (Offerwalls API)</h4>
-                    <p class="text-muted">هنا يتم دمج نوافذ الشركات العالمية. لكي يعمل العرض، يتم تمرير معرف المستخدم (`subId = username`) تلقائياً لتعود الأرباح لحسابك عبر الـ Postback.</p>
+                    <h4 class="fw-bold mb-3">عروض واستطلاعات الرأي الحقيقية</h4>
+                    <p class="text-muted">شركة CPX Research تعمل الآن بشكل مفعل وحقيقي بـ App ID الخاص بك (37107).</p>
                     
                     <div class="mb-3">
                         <label class="form-label fw-bold">اختر شبكة العروض لعرضها:</label>
                         <select id="offerwallSelector" class="form-select" onchange="changeOfferwall()">
-                            <option value="cpx">CPX Research (استطلاعات رأي)</option>
+                            <option value="cpx">CPX Research (مفعّل بـ App ID: 37107)</option>
                             <option value="bitlabs">BitLabs (تطبيقات وألعاب)</option>
                             <option value="monlix">Monlix (عروض سريعة)</option>
                         </select>
                     </div>
 
-                    <!-- إطار عرض الشركات (Iframe الحقيقي) -->
+                    <!-- إطار عرض الشركات -->
                     <div id="offerwallFrameContainer" class="mt-3">
                         <iframe id="activeOfferwallFrame" class="offerwall-frame" src=""></iframe>
                     </div>
@@ -103,7 +103,7 @@
         </div>
     </div>
 
-    <!-- Modal تفاصيل المهمة أولاً قبل الإثبات -->
+    <!-- Modal تفاصيل المهمة -->
     <div class="modal fade" id="taskDetailsModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -173,7 +173,7 @@
             updateAuthUI();
             loadTasks();
             loadPendingProofs();
-            changeOfferwall(); // تحميل أول شبكة عروض
+            changeOfferwall();
         });
 
         async function updateAuthUI() {
@@ -201,7 +201,7 @@
             bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
         });
 
-        // جلب المهام مع عرض تفاصيلها أولاً
+        // جلب المهام
         async function loadTasks() {
             const container = document.getElementById("tasksContainer");
             container.innerHTML = `<div class="text-center text-muted py-5">جاري جلب المهام...</div>`;
@@ -233,7 +233,6 @@
             });
         }
 
-        // إظهار تفاصيل المهمة في النافذة المنبثقة أولاً
         function showTaskDetails(id, title, company, reward, desc) {
             activeTaskIdForProof = id;
             document.getElementById("modalTaskTitle").innerText = title;
@@ -244,7 +243,6 @@
             new bootstrap.Modal(document.getElementById('taskDetailsModal')).show();
         }
 
-        // الانتقال من شاشة التفاصيل إلى شاشة إرسال الإثبات
         function proceedToProof() {
             if (!currentUser) {
                 alert("يرجى تسجيل الدخول أولاً لتنفيذ المهمة!");
@@ -255,7 +253,6 @@
             new bootstrap.Modal(document.getElementById('proofModal')).show();
         }
 
-        // إرسال الإثبات لقاعدة البيانات
         document.getElementById("submitProofForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             const taskId = document.getElementById("selectedTaskId").value;
@@ -278,26 +275,23 @@
             }
         });
 
-        // إدارة شبكات العروض الحقيقية (Offerwalls API & Iframes)
+        // إدارة شبكات العروض الحقيقية
         function changeOfferwall() {
             const selector = document.getElementById("offerwallSelector").value;
             const frame = document.getElementById("activeOfferwallFrame");
             const subId = currentUser || "guest_user";
 
-            // روابط حقيقية للشركات مع تمرير معرف المستخدم (SubID/UserId) لضمان تسجيل الأرباح تلقائياً
             if (selector === "cpx") {
-                // استبدل app_id برقم مشروعك الحقيقي من موقع CPX Research
-                frame.src = `https://offerwall.cpx-research.com/index.php?app_id=YOUR_CPX_APP_ID&ext_user_id=${subId}`;
+                // استخدام رقم App ID الخاص بك المعتمد 37107
+                frame.src = `https://offerwall.cpx-research.com/index.php?app_id=37107&ext_user_id=${subId}`;
             } else if (selector === "bitlabs") {
-                // استبدل token برمز الناشر من BitLabs
                 frame.src = `https://web.bitlabs.ai/?token=YOUR_BITLABS_TOKEN&uid=${subId}`;
             } else if (selector === "monlix") {
-                // استبدل app_id برمز Monlix
                 frame.src = `https://wall.monlix.com/?appid=YOUR_MONLIX_ID&subid_1=${subId}`;
             }
         }
 
-        // لوحة الأدمن: جلب الإثباتات وقبولها
+        // لوحة الأدمن
         async function loadPendingProofs() {
             const container = document.getElementById("pendingProofsContainer");
             const { data } = await supabaseClient.from("task_proofs").select("*, tasks(title, reward)").eq("status", "pending");
@@ -332,7 +326,6 @@
             updateAuthUI();
         }
 
-        // نشر مهمة جديدة
         document.getElementById("addTaskForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             await supabaseClient.from("tasks").insert([{
