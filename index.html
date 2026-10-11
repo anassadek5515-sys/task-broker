@@ -51,7 +51,7 @@
 
     <div class="container my-5">
         
-        <!-- قسم المكافآت التفاعلية الحقيقية -->
+        <!-- قسم المكافآت التفاعلية -->
         <div class="row g-3 mb-4">
             <div class="col-md-8">
                 <div class="card p-3 border-0 shadow-sm h-100">
@@ -123,7 +123,7 @@
 
         <div class="tab-content" id="mainTabsContent">
             
-            <!-- شبكات العروض الـ 15 مع تمرير معرّف المستخدم الحقيقي -->
+            <!-- شبكات العروض الـ 15 -->
             <div class="tab-pane fade show active" id="networks-tab">
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📊</div><h5 class="fw-bold">1. CPX Research</h5><p class="text-muted small">استطلاعات رأي عالمية.</p><button class="btn btn-primary fw-bold mt-auto py-2" onclick="openCPXResearch()">🚀 فتح الاستطلاعات</button></div></div>
@@ -173,49 +173,25 @@
         </div>
     </div>
 
-    <!-- Modal لوحة المالك والتحكم الحقيقية -->
+    <!-- Modal تسجيل كلمة سر المالك للتحويل للوحة الإدارة -->
     <div class="modal fade" id="adminModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title fw-bold">👑 لوحة التحكم الحقيقية لمالك المنصة</h5>
+                    <h5 class="modal-title fw-bold">👑 الدخول للوحة التحكم الرئيسية للمالك</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="adminAuthSection">
-                        <p class="text-warning small">⚠️ هذه اللوحة محمية حصرياً للمالك المسجل بالبريد: (Anassadek5535@gmail.com).</p>
-                        <label class="form-label fw-bold">أدخل كلمة سر المالك السرية:</label>
-                        <input type="password" id="adminPassInput" class="form-control mb-3" placeholder="كلمة سر الإدارة">
-                        <button class="btn btn-danger w-100 fw-bold" onclick="verifyAdmin()">دخول لوحة المالك</button>
-                    </div>
-
-                    <div id="adminControlsSection" style="display:none;">
-                        <div class="alert alert-success fw-bold">أهلاً بك يا أنس! إليك طلبات السحب الحقيقية المعلقة من المستخدمين:</div>
-                        
-                        <!-- جدول طلبات السحب الحقيقية -->
-                        <div class="card p-3 mb-3 border-warning">
-                            <h6>💳 طلبات السحب الواردة:</h6>
-                            <div id="withdrawalsListContainer" class="table-responsive">
-                                <p class="text-muted">جاري تحميل الطلبات...</p>
-                            </div>
-                        </div>
-
-                        <!-- تعديل رصيد مستخدم حقيقي -->
-                        <div class="card p-3 mb-3 border-danger">
-                            <h6>💰 تعديل رصيد مستخدم في قاعدة البيانات:</h6>
-                            <div class="row g-2">
-                                <div class="col-md-5"><input type="text" id="adminUserTarget" class="form-control" placeholder="اسم المستخدم"></div>
-                                <div class="col-md-4"><input type="number" step="0.1" id="adminAmountTarget" class="form-control" placeholder="المبلغ الجديد ($)"></div>
-                                <div class="col-md-3"><button class="btn btn-success w-100" onclick="adminModifyBalance()">تعديل الرصيد</button></div>
-                            </div>
-                        </div>
-                    </div>
+                    <p class="text-warning small">⚠️ هذه اللوحة محمية حصرياً للمالك المسجل بالبريد: (Anassadek5535@gmail.com).</p>
+                    <label class="form-label fw-bold">أدخل كلمة سر المالك السرية:</label>
+                    <input type="password" id="adminPassInput" class="form-control mb-3" placeholder="كلمة سر الإدارة">
+                    <button class="btn btn-danger w-100 fw-bold" onclick="verifyAdmin()">الانتقال إلى لوحة الإدارة 🚀</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal تسجيل الحساب / تسجيل الدخول الحقيقي -->
+    <!-- Modal تسجيل الحساب / تسجيل الدخول -->
     <div class="modal fade" id="authModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -258,7 +234,6 @@
                 document.getElementById("logoutBtn").style.display = "inline";
                 document.getElementById("userBalanceContainer").style.display = "inline";
                 
-                // جلب الرصيد الحقيقي من قاعدة البيانات
                 const { data } = await supabaseClient.from("users").select("balance, email").eq("username", currentUser).single();
                 if (data) { 
                     document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
@@ -280,14 +255,12 @@
             location.reload();
         }
 
-        // نظام التسجيل الحقيقي في جدول Supabase
         document.getElementById("registerForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             const u = document.getElementById("regUser").value.trim();
             const em = document.getElementById("regEmail").value.trim();
             const p = document.getElementById("regPass").value;
             
-            // تحقق إن كان المستخدم موجود مسبقاً أو أنشئه
             const { data: existingUser } = await supabaseClient.from("users").select("*").eq("username", u).single();
             
             if (existingUser) {
@@ -318,17 +291,14 @@
             bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
         });
 
-        // دوال زيادة الرصيد الحقيقي في قاعدة البيانات
         async function addBalanceToUser(amount, message) {
             if (!currentUser) return alert("يرجى تسجيل الدخول أولاً لتتمكن من ربح الأرصدة الحقيقية!");
             
-            // جلب الرصيد الحالي
             const { data } = await supabaseClient.from("users").select("balance").eq("username", currentUser).single();
             if (!data) return alert("خطأ في جلب بيانات المستخدم!");
 
             let newBalance = parseFloat(data.balance || 0) + parseFloat(amount);
 
-            // تحديث الرصيد في قاعدة البيانات
             const { error } = await supabaseClient.from("users").update({ balance: newBalance }).eq("username", currentUser);
             if (error) {
                 alert("❌ حدث خطأ أثناء تحديث الرصيد.");
@@ -360,16 +330,13 @@
 
         function redeemGiftCard(cardName, amount) {
             if (!currentUser) return alert("سجل الدخول أولاً!");
-            // يمكننا خصم المبلغ أو إرساله كطلب سحب
             addBalanceToUser(-amount, `تم طلب استبدال بطاقة (${cardName})`);
         }
 
-        // فتح شبكات العروض الحقيقية مع تمرير اسم مستخدم المنصة الحقيقي
         function openCPXResearch() { window.open(`https://offers.cpx-research.com/index.php?app_id=37107&ext_user_id=${currentUser || 'guest'}`, '_blank'); }
         function openTimeWall() { window.open(`https://timewall.io/users/login`, '_blank'); }
         function openNetwork(networkName) { alert(`🚀 جاري التوجيه إلى عروض شبكة ${networkName} مع ربط حسابك (${currentUser || 'guest'})...`); }
 
-        // تقديم طلب السحب الحقيقي وحفظه في جدول withdrawals
         document.getElementById("withdrawForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             if (!currentUser) return alert("سجل الدخول لتقديم طلب السحب!");
@@ -378,13 +345,11 @@
             const address = document.getElementById("withdrawAddress").value;
             const amount = parseFloat(document.getElementById("withdrawAmount").value);
 
-            // التحقق من الرصيد الحقيقي أولاً
             const { data } = await supabaseClient.from("users").select("balance").eq("username", currentUser).single();
             if (!data || parseFloat(data.balance) < amount) {
                 return alert("❌ رصيدك الحالي لا يكفي لإتمام هذا السحب!");
             }
 
-            // حفظ الطلب في قاعدة البيانات
             const { error } = await supabaseClient.from("withdrawals").insert([{
                 username: currentUser,
                 method: method,
@@ -396,7 +361,6 @@
             if (error) {
                 alert("❌ حدث خطأ أثناء إرسال طلب السحب: " + error.message);
             } else {
-                // خصم المبلغ مؤقتاً أو انتظاره للموافقة
                 let remainingBalance = parseFloat(data.balance) - amount;
                 await supabaseClient.from("users").update({ balance: remainingBalance }).eq("username", currentUser);
                 
@@ -406,7 +370,7 @@
             }
         });
 
-        // لوحة المالك الحقيقية
+        // 👑 دالة فتح لوحة التحكم والتحقق من المالك ثم التحويل إلى admin.html
         function openAdminPanel() {
             new bootstrap.Modal(document.getElementById('adminModal')).show();
         }
@@ -420,63 +384,10 @@
             }
 
             if (currentUserEmail.toLowerCase().trim() === ADMIN_OWNER_EMAIL.toLowerCase().trim() && inputPass === ADMIN_SECRET_PASS) {
-                document.getElementById("adminAuthSection").style.display = "none";
-                document.getElementById("adminControlsSection").style.display = "block";
-                loadWithdrawals(); // تحميل طلبات السحب الحقيقية
+                localStorage.setItem("adminSession", "active");
+                window.location.href = "admin.html"; // تحويلك مباشرة لصفحة الإدارة المستقلة
             } else {
                 alert("❌ غير مصرح لك! كلمة السر خاطئة أو أنك لست المالك.");
-            }
-        }
-
-        // جلب طلبات السحب الحقيقية وعرضها في لوحة التحكم للمالك
-        async function loadWithdrawals() {
-            const container = document.getElementById("withdrawalsListContainer");
-            const { data, error } = await supabaseClient.from("withdrawals").select("*").order('created_at', { ascending: false });
-
-            if (error || !data || data.length === 0) {
-                container.innerHTML = `<p class="text-muted">لا توجد طلبات سحب معلقة حالياً.</p>`;
-                return;
-            }
-
-            let html = `<table class="table table-dark table-sm"><thead><tr><th>المستخدم</th><th>الطريقة</th><th>العنوان</th><th>المبلغ</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>`;
-            data.forEach(w => {
-                html += `<tr>
-                    <td>${w.username}</td>
-                    <td>${w.method}</td>
-                    <td>${w.address}</td>
-                    <td class="text-success">$${w.amount}</td>
-                    <td><span class="badge bg-warning">${w.status}</span></td>
-                    <td>
-                        <button class="btn btn-xs btn-success py-0 px-2" onclick="updateWithdrawal(${w.id}, 'approved')">موافقة</button>
-                        <button class="btn btn-xs btn-danger py-0 px-2" onclick="updateWithdrawal(${w.id}, 'rejected')">رفض</button>
-                    </td>
-                </tr>`;
-            });
-            html += `</tbody></table>`;
-            container.innerHTML = html;
-        }
-
-        async function updateWithdrawal(id, status) {
-            await supabaseClient.from("withdrawals").update({ status: status }).eq("id", id);
-            alert(`✅ تم تحديث حالة الطلب إلى (${status}) بنجاح.`);
-            loadWithdrawals();
-        }
-
-        async function adminModifyBalance() {
-            if (!currentUserEmail || currentUserEmail.toLowerCase().trim() !== ADMIN_OWNER_EMAIL.toLowerCase().trim()) {
-                alert("❌ عملية مرفوضة!");
-                return;
-            }
-
-            const targetUser = document.getElementById("adminUserTarget").value.trim();
-            const amount = parseFloat(document.getElementById("adminAmountTarget").value);
-            if (!targetUser || isNaN(amount)) return alert("أدخل بيانات صحيحة!");
-            
-            const { error } = await supabaseClient.from("users").update({ balance: amount }).eq("username", targetUser);
-            if (error) {
-                alert("❌ حدث خطأ، تأكد من اسم المستخدم.");
-            } else {
-                alert(`✅ تم تعديل رصيد المستخدم (${targetUser}) إلى $${amount} بنجاح في قاعدة البيانات!`);
             }
         }
     </script>
