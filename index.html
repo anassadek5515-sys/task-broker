@@ -35,7 +35,7 @@
                 <span class="text-white small" id="userBalanceContainer" style="display:none;">
                     💰 الرصيد: <strong class="text-success" id="balanceVal">$0.00</strong>
                 </span>
-                <button class="btn btn-outline-light btn-sm" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول</button>
+                <button class="btn btn-outline-light btn-sm" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول / حساب جديد</button>
                 <button class="btn btn-outline-danger btn-sm" id="logoutBtn" style="display:none;" onclick="logoutUser()">خروج</button>
             </div>
         </div>
@@ -169,7 +169,7 @@
         </div>
     </div>
 
-    <!-- Modal تسجيل كلمة سر المالك للتحويل للوحة الإدارة المشفرة -->
+    <!-- Modal لوحة التحكم للمالك -->
     <div class="modal fade" id="adminModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -187,18 +187,62 @@
         </div>
     </div>
 
-    <!-- Modal تسجيل الحساب / تسجيل الدخول -->
+    <!-- Modal المصادقة المزدوجة (تسجيل دخول / إنشاء حساب / استعادة كلمة السر) -->
     <div class="modal fade" id="authModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title fw-bold">تسجيل الحساب أو الدخول المشفر</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-header">
+                    <ul class="nav nav-tabs card-header-tabs w-100" id="authTab" role="tablist">
+                        <li class="nav-item w-50 text-center">
+                            <button class="nav-link active fw-bold w-100" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-panel" type="button">تسجيل الدخول</button>
+                        </li>
+                        <li class="nav-item w-50 text-center">
+                            <button class="nav-link fw-bold w-100" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup-panel" type="button">حساب جديد</button>
+                        </li>
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
                 <div class="modal-body">
-                    <form id="registerForm">
-                        <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="regUser" class="form-control" required></div>
-                        <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="regEmail" class="form-control" required></div>
-                        <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="regPass" class="form-control" required></div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2">تسجيل / دخول آمن</button>
-                    </form>
+                    <div class="tab-content" id="authTabContent">
+                        
+                        <!-- 1. نموذج تسجيل الدخول -->
+                        <div class="tab-pane fade show active" id="login-panel">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label class="form-label">البريد الإلكتروني</label>
+                                    <input type="email" id="loginEmail" class="form-control" required placeholder="name@example.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">كلمة السر</label>
+                                    <input type="password" id="loginPass" class="form-control" required placeholder="******">
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <a href="#" class="text-warning small text-decoration-none" onclick="forgotPassword()">نسيت كلمة السر؟</a>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2">دخول المنصة</button>
+                            </form>
+                        </div>
+
+                        <!-- 2. نموذج إنشاء حساب جديد -->
+                        <div class="tab-pane fade" id="signup-panel">
+                            <form id="signupForm">
+                                <div class="mb-3">
+                                    <label class="form-label">اسم المستخدم</label>
+                                    <input type="text" id="signupUser" class="form-control" required placeholder="مثال: Anas123">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">البريد الإلكتروني</label>
+                                    <input type="email" id="signupEmail" class="form-control" required placeholder="name@example.com">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">كلمة السر</label>
+                                    <input type="password" id="signupPass" class="form-control" required placeholder="******">
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 fw-bold py-2">إنشاء حساب جديد</button>
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -228,7 +272,6 @@
                 const { data } = await supabaseClient.from("users").select("balance, username").eq("email", user.email).single();
                 if (data) { 
                     document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
-                    document.getElementById("authNavBtn").innerText = data.username;
                 }
             } else {
                 document.getElementById("authNavBtn").style.display = "inline";
@@ -243,13 +286,29 @@
             location.reload();
         }
 
-        // نظام التسجيل والدخول عبر Supabase Auth
-        document.getElementById("registerForm").addEventListener("submit", async function(e) {
+        // 🔑 1. تسجيل الدخول
+        document.getElementById("loginForm").addEventListener("submit", async function(e) {
             e.preventDefault();
-            const u = document.getElementById("regUser").value.trim();
-            const em = document.getElementById("regEmail").value.trim();
-            const p = document.getElementById("regPass").value;
-            
+            const em = document.getElementById("loginEmail").value.trim();
+            const p = document.getElementById("loginPass").value;
+
+            let { data, error } = await supabaseClient.auth.signInWithPassword({ email: em, password: p });
+
+            if (error) {
+                alert("❌ خطأ في الدخول: " + error.message);
+            } else {
+                alert("✅ أهلاً بك مجدداً، تم تسجيل الدخول بنجاح!");
+                location.reload();
+            }
+        });
+
+        // 📝 2. إنشاء حساب جديد
+        document.getElementById("signupForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const u = document.getElementById("signupUser").value.trim();
+            const em = document.getElementById("signupEmail").value.trim();
+            const p = document.getElementById("signupPass").value;
+
             let { data, error } = await supabaseClient.auth.signUp({
                 email: em,
                 password: p,
@@ -257,19 +316,29 @@
             });
 
             if (error) {
-                let signInRes = await supabaseClient.auth.signInWithPassword({ email: em, password: p });
-                if (signInRes.error) {
-                    alert("❌ خطأ: " + signInRes.error.message);
-                    return;
-                }
-                alert("✅ أهلاً بك مجدداً، تم تسجيل الدخول بنجاح!");
+                alert("❌ خطأ أثناء إنشاء الحساب: " + error.message);
             } else {
                 await supabaseClient.from("users").upsert([{ username: u, email: em, balance: 0 }]);
                 alert("🎉 تم إنشاء الحساب وتسجيل الدخول بنجاح!");
+                location.reload();
             }
-
-            location.reload();
         });
+
+        // ✉️ 3. نسيت كلمة السر (إرسال بريد إلكتروني لإعادة التعيين)
+        async function forgotPassword() {
+            const email = prompt("يرجى إدخال بريدك الإلكتروني المسجل لإرسال رابط إعادة تعيين كلمة السر:");
+            if (!email) return;
+
+            const { data, error } = await supabaseClient.auth.resetPasswordForEmail(email.trim(), {
+                redirectTo: window.location.origin
+            });
+
+            if (error) {
+                alert("❌ حدث خطأ: " + error.message);
+            } else {
+                alert("📩 تم إرسال رسالة إلى بريدك الإلكتروني بنجاح! افتح بريدك واضغط على الرابط لاستعادة كلمة السر.");
+            }
+        }
 
         async function addBalanceToUser(amount, message) {
             const { data: { user } } = await supabaseClient.auth.getUser();
@@ -356,24 +425,22 @@
             new bootstrap.Modal(document.getElementById('adminModal')).show();
         }
 
-        // 👑 التحقق المشفر من المالك عبر Supabase Auth
         async function verifyAdminSecure() {
             const pass = document.getElementById("adminPassInput").value;
             const ownerEmail = "Anassadek5535@gmail.com";
 
-            // محاولة تسجيل الدخول كمشرف عبر Supabase Auth
             const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: ownerEmail,
                 password: pass
             });
 
             if (error) {
-                alert("❌ غير مصرح لك! كلمة المرور غير صحيحة أو الحساب غير موجود في قاعدة بيانات السيرفر.");
+                alert("❌ غير مصرح لك! كلمة المرور غير صحيحة أو الحساب غير موجود.");
                 return;
             }
 
             if (data.user && data.user.email.toLowerCase() === ownerEmail.toLowerCase()) {
-                window.location.href = "admin.html"; // توجيه آمن ومشفر للوحة التحكم
+                window.location.href = "admin.html";
             } else {
                 alert("❌ خطأ في الصلاحيات.");
             }
