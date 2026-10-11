@@ -127,9 +127,12 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwdWpiZ3lncm51cWdkbnJleGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDA1MDUsImV4cCI6MjEwNzIxNjUwNX0.dmNknj6Sg3MTFGjAcyCHiPTyfTWVeyEPBgEe5oVZGGU";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // حماية الصفحة: التأكد من وجود جلسة الإدارة للمالك فقط
-        if (localStorage.getItem("adminSession") !== "active" || localStorage.getItem("currentUserEmail") !== "Anassadek5535@gmail.com") {
-            alert("❌ غير مسموح بالدخول لغير الأدمن!");
+        // حماية الصفحة بشكل مرن ومحصن تماماً
+        const storedEmail = (localStorage.getItem("currentUserEmail") || "").toLowerCase().trim();
+        const adminEmail = "Anassadek5535@gmail.com".toLowerCase().trim();
+
+        if (localStorage.getItem("adminSession") !== "active" || storedEmail !== adminEmail) {
+            alert("❌ غير مسموح بالدخول لغير الأدمن! يرجى تسجيل الدخول بالبريد الرئيسي أولاً.");
             window.location.href = "index.html";
         }
 
