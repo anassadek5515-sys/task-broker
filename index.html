@@ -211,13 +211,14 @@
                 <div class="modal-header bg-danger text-white"><h5 class="modal-title fw-bold">👑 لوحة التحكم الشاملة لمالك المنصة</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <div id="adminAuthSection">
+                        <p class="text-warning small">⚠️ هذه اللوحة محمية حصرياً للمالك المسجل بالبريد: (Anassadek5535@gmail.com).</p>
                         <label class="form-label fw-bold">أدخل كلمة سر المالك السرية:</label>
                         <input type="password" id="adminPassInput" class="form-control mb-3" placeholder="كلمة سر الإدارة">
                         <button class="btn btn-danger w-100 fw-bold" onclick="verifyAdmin()">دخول لوحة المالك</button>
                     </div>
 
                     <div id="adminControlsSection" style="display:none;">
-                        <div class="alert alert-success fw-bold">أهلاً بك يا مالك المنصة! يمكنك التحكم بكل الحسابات والسحوبات من هنا:</div>
+                        <div class="alert alert-success fw-bold">أهلاً بك يا انس! تم التحقق من هويتك كمالك للمنصة بنجاح، يمكنك التحكم بكل الحسابات والسحوبات من هنا:</div>
                         
                         <!-- تعديل رصيد مستخدم -->
                         <div class="card p-3 mb-3 border-danger">
@@ -269,7 +270,11 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentUser = localStorage.getItem("currentUser") || null;
-        const ADMIN_SECRET_PASS = "admin2026owner"; // كلمة سر المالك الرئيسية
+        let currentUserEmail = localStorage.getItem("currentUserEmail") || null;
+        
+        // 👑 تم تعيين بريدك الشخصي وكلمة السر المخصصة لك
+        const ADMIN_OWNER_EMAIL = "Anassadek5535@gmail.com"; 
+        const ADMIN_SECRET_PASS = "01093083973"; // كلمة سر المالك السرية
 
         document.addEventListener("DOMContentLoaded", function() { updateAuthUI(); });
 
@@ -284,8 +289,12 @@
             if (currentUser) {
                 document.getElementById("authNavBtn").innerText = currentUser;
                 document.getElementById("userBalanceContainer").style.display = "inline";
-                const { data } = await supabaseClient.from("users").select("balance").eq("username", currentUser).single();
-                if (data) { document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2); }
+                const { data } = await supabaseClient.from("users").select("balance, email").eq("username", currentUser).single();
+                if (data) { 
+                    document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
+                    currentUserEmail = data.email;
+                    localStorage.setItem("currentUserEmail", data.email);
+                }
             }
         }
 
@@ -294,9 +303,12 @@
             const u = document.getElementById("regUser").value;
             const em = document.getElementById("regEmail").value;
             const p = document.getElementById("regPass").value;
+            
             await supabaseClient.from("users").insert([{ username: u, email: em, password: p, balance: 0 }]);
             currentUser = u;
+            currentUserEmail = em;
             localStorage.setItem("currentUser", u);
+            localStorage.setItem("currentUserEmail", em);
             updateAuthUI();
             bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
         });
@@ -305,17 +317,29 @@
             new bootstrap.Modal(document.getElementById('adminModal')).show();
         }
 
-        function verifyAdmin() {
+        async function verifyAdmin() {
             const inputPass = document.getElementById("adminPassInput").value;
-            if (inputPass === ADMIN_SECRET_PASS) {
+
+            if (!currentUser || !currentUserEmail) {
+                alert("❌ يجب تسجيل الدخول بريدك المعتمد (Anassadek5535@gmail.com) أولاً!");
+                return;
+            }
+
+            // التحقق الصارم من البريد الإلكتروني وكلمة السر للمالك
+            if (currentUserEmail.toLowerCase().trim() === ADMIN_OWNER_EMAIL.toLowerCase().trim() && inputPass === ADMIN_SECRET_PASS) {
                 document.getElementById("adminAuthSection").style.display = "none";
                 document.getElementById("adminControlsSection").style.display = "block";
             } else {
-                alert("❌ كلمة السر خاطئة! هذا القسم مخصص لمالك المنصة فقط.");
+                alert("❌ غير مصرح لك! هذه اللوحة مخصصة فقط لمالك المنصة (Anassadek5535@gmail.com) وبكلمة السر الصحيحة.");
             }
         }
 
         async function adminModifyBalance() {
+            if (!currentUserEmail || currentUserEmail.toLowerCase().trim() !== ADMIN_OWNER_EMAIL.toLowerCase().trim()) {
+                alert("❌ عملية مرفوضة! أنت لست المالك.");
+                return;
+            }
+
             const targetUser = document.getElementById("adminUserTarget").value;
             const amount = parseFloat(document.getElementById("adminAmountTarget").value);
             if (!targetUser || isNaN(amount)) return alert("أدخل بيانات صحيحة!");
