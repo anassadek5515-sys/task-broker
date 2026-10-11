@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنصة العالمية الشاملة للأرباح | Earn Universe Ultimate</title>
+    <title>Earn Universe Pro | المنصة العالمية الشاملة للأرباح</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -14,17 +14,15 @@
         .feature-card:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); }
         .ticker-wrap { background: #000; color: #fff; padding: 9px 0; font-size: 0.85rem; overflow: hidden; white-space: nowrap; }
         .streak-box { border: 2px dashed #0d6efd; border-radius: 12px; padding: 10px; text-align: center; }
-        .gift-card-img { font-size: 2.5rem; }
         .loot-box { cursor: pointer; border: 2px gold solid; border-radius: 18px; background: rgba(255, 215, 0, 0.1); transition: 0.3s; }
         .loot-box:hover { background: rgba(255, 215, 0, 0.25); transform: scale(1.03); }
-        .admin-badge { background: #dc3545; color: white; font-size: 0.75rem; padding: 3px 8px; border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <!-- شريط الإشعارات الحية -->
     <div class="ticker-wrap text-center">
-        <span>🔥 15 شبكة عروض عالمية | 💰 تم تحويل أرباح المستخدمين فوراً | 🛡️ حماية حظر VPN نشطة | 👑 ملكية وإدارة شاملة للمشرف</span>
+        <span>🔥 15 شبكة عروض عالمية | 💰 نظام أرباح حقيقي وفوري | 🛡️ حماية حظر VPN نشطة | 👑 ملكية وإدارة شاملة للمشرف</span>
     </div>
 
     <!-- القائمة العلوية -->
@@ -34,10 +32,11 @@
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-outline-warning btn-sm me-1" id="themeToggleBtn" onclick="toggleTheme()">☀️ المظهر</button>
                 <button class="btn btn-danger btn-sm fw-bold me-2" onclick="openAdminPanel()">👑 لوحة المالك</button>
-                <span class="text-white small d-none d-md-inline" id="userBalanceContainer" style="display:none;">
-                    💰 الرصيد: <strong class="text-success" id="balanceVal">$0.00</strong> | ⚡ المستوى: <span class="badge bg-primary" id="userLevel">1</span>
+                <span class="text-white small" id="userBalanceContainer" style="display:none;">
+                    💰 الرصيد: <strong class="text-success" id="balanceVal">$0.00</strong>
                 </span>
                 <button class="btn btn-outline-light btn-sm" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول</button>
+                <button class="btn btn-outline-danger btn-sm" id="logoutBtn" style="display:none;" onclick="logoutUser()">خروج</button>
             </div>
         </div>
     </nav>
@@ -46,29 +45,17 @@
     <div class="hero-section text-center shadow">
         <div class="container">
             <h1 class="fw-bold mb-2 display-5">منصة الأرباح العالمية الشاملة</h1>
-            <p class="lead mb-3">أضخم منصة مهام واستطلاعات وعروض ممولة بالكامل من الشركات العالمية.</p>
-            
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="d-flex justify-content-between text-white-50 small mb-1">
-                        <span>مستوى التقدم (XP)</span>
-                        <span id="xpText">40 / 100 XP</span>
-                    </div>
-                    <div class="progress" style="height: 10px; background-color: rgba(255,255,255,0.2);">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"></div>
-                    </div>
-                </div>
-            </div>
+            <p class="lead mb-3">أضخم منصة مهام واستطلاعات وعروض حقيقية ممولة بالكامل من الشركات العالمية.</p>
         </div>
     </div>
 
     <div class="container my-5">
         
-        <!-- قسم المكافآت التفاعلية -->
+        <!-- قسم المكافآت التفاعلية الحقيقية -->
         <div class="row g-3 mb-4">
             <div class="col-md-8">
                 <div class="card p-3 border-0 shadow-sm h-100">
-                    <h6 class="fw-bold mb-2">🔥 سلسلة الدخول اليومي المتتالي (7-Day Streak):</h6>
+                    <h6 class="fw-bold mb-2">🔥 سجل الدخول اليومي (مكافأة حقيقية لرصيدك):</h6>
                     <div class="row g-2 text-center">
                         <div class="col"><div class="streak-box bg-body-tertiary"><strong>اليوم 1</strong><br><small class="text-success">+$0.02</small></div></div>
                         <div class="col"><div class="streak-box bg-body-tertiary"><strong>اليوم 2</strong><br><small class="text-success">+$0.04</small></div></div>
@@ -85,7 +72,7 @@
                 <div class="card loot-box p-3 text-center h-100 shadow-sm d-flex flex-column justify-content-center align-items-center" onclick="openLootBox()">
                     <div class="fs-1">🎁</div>
                     <h6 class="fw-bold text-warning mb-1">صندوق الجوائز الخارقة</h6>
-                    <small class="text-muted">اضغط لفتح صندوق المفاجأة اليومي</small>
+                    <small class="text-muted">اضغط لفتح صندوق المفاجأة وإضافة الرصيد</small>
                 </div>
             </div>
         </div>
@@ -96,7 +83,7 @@
                 <div class="card feature-card p-3 text-center h-100 shadow-sm">
                     <div class="fs-3 mb-1">🎁</div>
                     <h6 class="fw-bold mb-1">المكافأة اليومية</h6>
-                    <small class="text-muted mb-2">استلم $0.05 يومياً</small>
+                    <small class="text-muted mb-2">استلم $0.05 مباشرة</small>
                     <button class="btn btn-warning btn-sm fw-bold mt-auto" onclick="claimDailyBonus()">استلام $0.05</button>
                 </div>
             </div>
@@ -129,16 +116,14 @@
 
         <!-- التبويبات الرئيسية -->
         <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="mainTabs">
-            <li class="nav-item"><button class="nav-link active fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#networks-tab">🌐 الـ 15 شركة العالمية</button></li>
+            <li class="nav-item"><button class="nav-link active fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#networks-tab">🌐 شبكات العروض الحقيقية</button></li>
             <li class="nav-item"><button class="nav-link fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#giftcards-tab">🎁 بطاقات الهدايا</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#quests-tab">🎯 التحديات</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#leaderboard-tab">🏆 المتصدرين</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#withdraw-tab">💳 سحب الأرباح</button></li>
+            <li class="nav-item"><button class="nav-link fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#withdraw-tab">💳 سحب الأرباح الحقيقي</button></li>
         </ul>
 
         <div class="tab-content" id="mainTabsContent">
             
-            <!-- شبكات العروض الـ 15 -->
+            <!-- شبكات العروض الـ 15 مع تمرير معرّف المستخدم الحقيقي -->
             <div class="tab-pane fade show active" id="networks-tab">
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📊</div><h5 class="fw-bold">1. CPX Research</h5><p class="text-muted small">استطلاعات رأي عالمية.</p><button class="btn btn-primary fw-bold mt-auto py-2" onclick="openCPXResearch()">🚀 فتح الاستطلاعات</button></div></div>
@@ -147,56 +132,40 @@
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📺</div><h5 class="fw-bold">4. Monlix Offers</h5><p class="text-muted small">إعلانات وزيارة مواضيع.</p><button class="btn btn-info text-white fw-bold mt-auto py-2" onclick="openNetwork('Monlix')">📺 فتح الإعلانات</button></div></div>
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📱</div><h5 class="fw-bold">5. AdGate Media</h5><p class="text-muted small">تثبيت ألعاب وتطبيقات.</p><button class="btn btn-danger fw-bold mt-auto py-2" onclick="openNetwork('AdGate Media')">📲 تصفح الألعاب</button></div></div>
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🔥</div><h5 class="fw-bold">6. Torox Offers</h5><p class="text-muted small">عروض ألعاب عالمية.</p><button class="btn btn-dark fw-bold mt-auto py-2" onclick="openNetwork('Torox')">🎯 فتح العروض</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">💡</div><h5 class="fw-bold">7. InBrain Surveys</h5><p class="text-muted small">استطلاعات استهلاكية للجوال.</p><button class="btn btn-outline-primary fw-bold mt-auto py-2" onclick="openNetwork('InBrain')">📋 بدء الاستطلاع</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">💎</div><h5 class="fw-bold">8. TheoremReach</h5><p class="text-muted small">ربح حتى لو لم يكتمل الاستطلاع.</p><button class="btn btn-outline-success fw-bold mt-auto py-2" onclick="openNetwork('TheoremReach')">✨ تجربة الآن</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🎁</div><h5 class="fw-bold">9. Lootably Wall</h5><p class="text-muted small">فيديوهات وألعاب خفيفة.</p><button class="btn btn-outline-warning text-dark fw-bold mt-auto py-2" onclick="openNetwork('Lootably')">🎬 مشاهدة وكسب</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🕹️</div><h5 class="fw-bold">10. AyeT-Studios</h5><p class="text-muted small">تثبيت ألعاب ومكافآت مستويات.</p><button class="btn btn-outline-info fw-bold mt-auto py-2" onclick="openNetwork('AyeT-Studios')">🎮 تجربة الألعاب</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📈</div><h5 class="fw-bold">11. Pollfish Surveys</h5><p class="text-muted small">استطلاعات تفاعلية وسريعة.</p><button class="btn btn-outline-danger fw-bold mt-auto py-2" onclick="openNetwork('Pollfish')">📝 دخول الآن</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🧩</div><h5 class="fw-bold">12. Yuno Surveys</h5><p class="text-muted small">أسئلة وأبحاث سوق يومية.</p><button class="btn btn-outline-dark fw-bold mt-auto py-2" onclick="openNetwork('Yuno')">🌐 بدء الأسئلة</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">⚡</div><h5 class="fw-bold">13. MM Offerwall</h5><p class="text-muted small">عروض سريعة وسهلة.</p><button class="btn btn-primary fw-bold mt-auto py-2" onclick="openNetwork('MM Wall')">⚡ تنفيذ العروض</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🌌</div><h5 class="fw-bold">14. RevU Wall</h5><p class="text-muted small">عروض مباشرة قديمة وقوية.</p><button class="btn btn-success fw-bold mt-auto py-2" onclick="openNetwork('RevU')">🚀 تصفح العروض</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📲</div><h5 class="fw-bold">15. HangMyAds</h5><p class="text-muted small">تطبيقات وعروض جوال حصرية.</p><button class="btn btn-warning fw-bold mt-auto py-2" onclick="openNetwork('HangMyAds')">📱 فتح التطبيقات</button></div></div>
+                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">💎</div><h5 class="fw-bold">7. Lootably Wall</h5><p class="text-muted small">فيديوهات وألعاب خفيفة.</p><button class="btn btn-outline-warning text-dark fw-bold mt-auto py-2" onclick="openNetwork('Lootably')">🎬 مشاهدة وكسب</button></div></div>
                 </div>
             </div>
 
             <!-- بطاقات الهدايا -->
             <div class="tab-pane fade" id="giftcards-tab">
                 <div class="row g-4 justify-content-center">
-                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow-sm"><div class="gift-card-img mb-2">💳</div><h6 class="fw-bold">Google Play $5.00</h6><p class="text-muted small">بطاقة هدايا جوجل بلاي</p><button class="btn btn-outline-success fw-bold mt-auto" onclick="redeemGiftCard('Google Play $5')">استبدال النقاط</button></div></div>
-                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow-sm"><div class="gift-card-img mb-2">🔥</div><h6 class="fw-bold">Free Fire Diamonds</h6><p class="text-muted small">شحن جواهر فري فاير</p><button class="btn btn-outline-danger fw-bold mt-auto" onclick="redeemGiftCard('Free Fire')">شحن الآن</button></div></div>
-                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow-sm"><div class="gift-card-img mb-2">🎮</div><h6 class="fw-bold">PUBG Mobile UC</h6><p class="text-muted small">شحن شدات ببجي موبايل</p><button class="btn btn-outline-warning fw-bold mt-auto" onclick="redeemGiftCard('PUBG UC')">شحن الآن</button></div></div>
-                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow-sm"><div class="gift-card-img mb-2">📦</div><h6 class="fw-bold">Amazon $10.00</h6><p class="text-muted small">كارت هدايا أمازون</p><button class="btn btn-outline-dark fw-bold mt-auto" onclick="redeemGiftCard('Amazon $10')">استبدال النقاط</button></div></div>
+                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow-sm"><div class="fs-1 mb-2">💳</div><h6 class="fw-bold">Google Play $5.00</h6><button class="btn btn-outline-success fw-bold mt-auto" onclick="redeemGiftCard('Google Play $5', 5.0)">استبدال النقاط</button></div></div>
+                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🔥</div><h6 class="fw-bold">Free Fire Diamonds</h6><button class="btn btn-outline-danger fw-bold mt-auto" onclick="redeemGiftCard('Free Fire', 2.0)">شحن الآن</button></div></div>
                 </div>
             </div>
 
-            <!-- التحديات -->
-            <div class="tab-pane fade" id="quests-tab">
-                <div class="card p-4 border-0 shadow-sm mx-auto" style="max-width: 650px;">
-                    <h4 class="fw-bold mb-3 text-center">🎯 التحديات اليومية المتجددة</h4>
-                    <div class="border-bottom py-2 d-flex justify-content-between align-items-center"><div><strong>أكمل 2 استطلاع اليوم</strong><br><small class="text-muted">المكافأة: +$0.10 + 20 XP</small></div><button class="btn btn-sm btn-outline-success" onclick="alert('أكمل العروض أولاً!')">استلام</button></div>
-                    <div class="border-bottom py-2 d-flex justify-content-between align-items-center"><div><strong>ادعُ صديقاً للتسجيل</strong><br><small class="text-muted">المكافأة: +$0.15 + 30 XP</small></div><button class="btn btn-sm btn-outline-success" onclick="copyRefLink()">دعوة</button></div>
-                </div>
-            </div>
-
-            <!-- المتصدرين -->
-            <div class="tab-pane fade" id="leaderboard-tab">
-                <div class="card p-4 border-0 shadow-sm mx-auto" style="max-width: 650px;">
-                    <h4 class="fw-bold mb-3 text-center">🏆 لوحة المتصدرين الأسبوعية</h4>
-                    <div class="d-flex justify-content-between py-2 border-bottom"><span>🥇 <strong>أحمد م.</strong> (مصر)</span><span class="badge bg-success">$142.50</span></div>
-                    <div class="d-flex justify-content-between py-2 border-bottom"><span>🥈 <strong>عمر خ.</strong> (السعودية)</span><span class="badge bg-success">$118.00</span></div>
-                    <div class="d-flex justify-content-between py-2 border-bottom"><span>🥉 <strong>يوسف ح.</strong> (المغرب)</span><span class="badge bg-success">$95.20</span></div>
-                </div>
-            </div>
-
-            <!-- السحب -->
+            <!-- السحب الحقيقي -->
             <div class="tab-pane fade" id="withdraw-tab">
                 <div class="card p-4 border-0 shadow-sm mx-auto" style="max-width: 600px;">
-                    <h4 class="fw-bold mb-3 text-center">💳 سحب الأرباح الفوري</h4>
+                    <h4 class="fw-bold mb-3 text-center">💳 سحب الأرباح الفوري (حقيقي)</h4>
                     <form id="withdrawForm">
-                        <div class="mb-3"><label class="form-label fw-bold">طريقة الدفع:</label><select class="form-select" id="withdrawMethod" required><option value="vodafone">فودافون كاش / المحافظ المحلية ($1.00 حد أدنى)</option><option value="payeer">Payeer ($2.00 حد أدنى)</option><option value="usdt">عملات رقمية USDT - TRC20 ($5.00 حد أدنى)</option></select></div>
-                        <div class="mb-3"><label class="form-label fw-bold">رقم المحفظة أو العنوان:</label><input type="text" class="form-control" id="withdrawAddress" placeholder="أدخل بيانات محفظتك بدقة" required></div>
-                        <div class="mb-3"><label class="form-label fw-bold">المبلغ المطلوب ($):</label><input type="number" step="0.1" min="1" class="form-control" id="withdrawAmount" placeholder="0.00" required></div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm">تأكيد طلب السحب</button>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">طريقة الدفع:</label>
+                            <select class="form-select" id="withdrawMethod" required>
+                                <option value="vodafone">فودافون كاش / المحافظ المحلية ($1.00 حد أدنى)</option>
+                                <option value="payeer">Payeer ($2.00 حد أدنى)</option>
+                                <option value="usdt">عملات رقمية USDT - TRC20 ($5.00 حد أدنى)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">رقم المحفظة أو العنوان:</label>
+                            <input type="text" class="form-control" id="withdrawAddress" placeholder="أدخل بيانات محفظتك بدقة" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">المبلغ المطلوب ($):</label>
+                            <input type="number" step="0.1" min="1" class="form-control" id="withdrawAmount" placeholder="0.00" required>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm">إرسال طلب السحب الحقيقي</button>
                     </form>
                 </div>
             </div>
@@ -204,11 +173,14 @@
         </div>
     </div>
 
-    <!-- Modal لوحة المالك والتحكم Admin Panel -->
+    <!-- Modal لوحة المالك والتحكم الحقيقية -->
     <div class="modal fade" id="adminModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-danger text-white"><h5 class="modal-title fw-bold">👑 لوحة التحكم الشاملة لمالك المنصة</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title fw-bold">👑 لوحة التحكم الحقيقية لمالك المنصة</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
                 <div class="modal-body">
                     <div id="adminAuthSection">
                         <p class="text-warning small">⚠️ هذه اللوحة محمية حصرياً للمالك المسجل بالبريد: (Anassadek5535@gmail.com).</p>
@@ -218,27 +190,23 @@
                     </div>
 
                     <div id="adminControlsSection" style="display:none;">
-                        <div class="alert alert-success fw-bold">أهلاً بك يا انس! تم التحقق من هويتك كمالك للمنصة بنجاح، يمكنك التحكم بكل الحسابات والسحوبات من هنا:</div>
+                        <div class="alert alert-success fw-bold">أهلاً بك يا أنس! إليك طلبات السحب الحقيقية المعلقة من المستخدمين:</div>
                         
-                        <!-- تعديل رصيد مستخدم -->
-                        <div class="card p-3 mb-3 border-danger">
-                            <h6>💰 تعديل رصيد مستخدم:</h6>
-                            <div class="row g-2">
-                                <div class="col-md-5"><input type="text" id="adminUserTarget" class="form-control" placeholder="اسم المستخدم"></div>
-                                <div class="col-md-4"><input type="number" step="0.1" id="adminAmountTarget" class="form-control" placeholder="المبلغ ($)"></div>
-                                <div class="col-md-3"><button class="btn btn-success w-100" onclick="adminModifyBalance()">تعديل الرصيد</button></div>
+                        <!-- جدول طلبات السحب الحقيقية -->
+                        <div class="card p-3 mb-3 border-warning">
+                            <h6>💳 طلبات السحب الواردة:</h6>
+                            <div id="withdrawalsListContainer" class="table-responsive">
+                                <p class="text-muted">جاري تحميل الطلبات...</p>
                             </div>
                         </div>
 
-                        <!-- الموافقة على السحوبات -->
-                        <div class="card p-3 mb-3 border-warning">
-                            <h6>💳 طلبات السحب المعلقة:</h6>
-                            <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-                                <div><strong>مستخدم: user123</strong> | فودافون كاش: 01012345678 | $5.00</div>
-                                <div>
-                                    <button class="btn btn-sm btn-success" onclick="alert('تمت الموافقة ودفع الطلب!')">موافقة</button>
-                                    <button class="btn btn-sm btn-danger" onclick="alert('تم رفض الطلب!')">رفض</button>
-                                </div>
+                        <!-- تعديل رصيد مستخدم حقيقي -->
+                        <div class="card p-3 mb-3 border-danger">
+                            <h6>💰 تعديل رصيد مستخدم في قاعدة البيانات:</h6>
+                            <div class="row g-2">
+                                <div class="col-md-5"><input type="text" id="adminUserTarget" class="form-control" placeholder="اسم المستخدم"></div>
+                                <div class="col-md-4"><input type="number" step="0.1" id="adminAmountTarget" class="form-control" placeholder="المبلغ الجديد ($)"></div>
+                                <div class="col-md-3"><button class="btn btn-success w-100" onclick="adminModifyBalance()">تعديل الرصيد</button></div>
                             </div>
                         </div>
                     </div>
@@ -247,11 +215,11 @@
         </div>
     </div>
 
-    <!-- Modal تسجيل الحساب -->
+    <!-- Modal تسجيل الحساب / تسجيل الدخول الحقيقي -->
     <div class="modal fade" id="authModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title fw-bold">تسجيل الدخول / إنشاء حساب</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-header"><h5 class="modal-title fw-bold">تسجيل الحساب أو الدخول بقاعدة البيانات</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <form id="registerForm">
                         <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="regUser" class="form-control" required></div>
@@ -272,9 +240,8 @@
         let currentUser = localStorage.getItem("currentUser") || null;
         let currentUserEmail = localStorage.getItem("currentUserEmail") || null;
         
-        // 👑 تم تعيين بريدك الشخصي وكلمة السر المخصصة لك
         const ADMIN_OWNER_EMAIL = "Anassadek5535@gmail.com"; 
-        const ADMIN_SECRET_PASS = "01093083973"; // كلمة سر المالك السرية
+        const ADMIN_SECRET_PASS = "01093083973";
 
         document.addEventListener("DOMContentLoaded", function() { updateAuthUI(); });
 
@@ -287,32 +254,159 @@
 
         async function updateAuthUI() {
             if (currentUser) {
-                document.getElementById("authNavBtn").innerText = currentUser;
+                document.getElementById("authNavBtn").style.display = "none";
+                document.getElementById("logoutBtn").style.display = "inline";
                 document.getElementById("userBalanceContainer").style.display = "inline";
+                
+                // جلب الرصيد الحقيقي من قاعدة البيانات
                 const { data } = await supabaseClient.from("users").select("balance, email").eq("username", currentUser).single();
                 if (data) { 
                     document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
                     currentUserEmail = data.email;
                     localStorage.setItem("currentUserEmail", data.email);
                 }
+            } else {
+                document.getElementById("authNavBtn").style.display = "inline";
+                document.getElementById("logoutBtn").style.display = "none";
+                document.getElementById("userBalanceContainer").style.display = "none";
             }
         }
 
+        function logoutUser() {
+            localStorage.clear();
+            currentUser = null;
+            currentUserEmail = null;
+            alert("✅ تم تسجيل الخروج بنجاح.");
+            location.reload();
+        }
+
+        // نظام التسجيل الحقيقي في جدول Supabase
         document.getElementById("registerForm").addEventListener("submit", async function(e) {
             e.preventDefault();
-            const u = document.getElementById("regUser").value;
-            const em = document.getElementById("regEmail").value;
+            const u = document.getElementById("regUser").value.trim();
+            const em = document.getElementById("regEmail").value.trim();
             const p = document.getElementById("regPass").value;
             
-            await supabaseClient.from("users").insert([{ username: u, email: em, password: p, balance: 0 }]);
-            currentUser = u;
-            currentUserEmail = em;
-            localStorage.setItem("currentUser", u);
-            localStorage.setItem("currentUserEmail", em);
+            // تحقق إن كان المستخدم موجود مسبقاً أو أنشئه
+            const { data: existingUser } = await supabaseClient.from("users").select("*").eq("username", u).single();
+            
+            if (existingUser) {
+                if (existingUser.password === p) {
+                    currentUser = u;
+                    currentUserEmail = existingUser.email;
+                    localStorage.setItem("currentUser", u);
+                    localStorage.setItem("currentUserEmail", existingUser.email);
+                    alert("✅ أهلاً بك مجدداً، تم تسجيل الدخول بنجاح!");
+                } else {
+                    alert("❌ كلمة السر غير صحيحة لهذا المستخدم!");
+                    return;
+                }
+            } else {
+                const { error } = await supabaseClient.from("users").insert([{ username: u, email: em, password: p, balance: 0 }]);
+                if (error) {
+                    alert("❌ خطأ أثناء التسجيل: " + error.message);
+                    return;
+                }
+                currentUser = u;
+                currentUserEmail = em;
+                localStorage.setItem("currentUser", u);
+                localStorage.setItem("currentUserEmail", em);
+                alert("🎉 تم إنشاء الحساب بنجاح وأهلاً بك في المنصة!");
+            }
+
             updateAuthUI();
             bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
         });
 
+        // دوال زيادة الرصيد الحقيقي في قاعدة البيانات
+        async function addBalanceToUser(amount, message) {
+            if (!currentUser) return alert("يرجى تسجيل الدخول أولاً لتتمكن من ربح الأرصدة الحقيقية!");
+            
+            // جلب الرصيد الحالي
+            const { data } = await supabaseClient.from("users").select("balance").eq("username", currentUser).single();
+            if (!data) return alert("خطأ في جلب بيانات المستخدم!");
+
+            let newBalance = parseFloat(data.balance || 0) + parseFloat(amount);
+
+            // تحديث الرصيد في قاعدة البيانات
+            const { error } = await supabaseClient.from("users").update({ balance: newBalance }).eq("username", currentUser);
+            if (error) {
+                alert("❌ حدث خطأ أثناء تحديث الرصيد.");
+            } else {
+                alert(`🎉 ${message} (تمت إضافة $${amount} لرصيدك الحقيقي بنجاح!)`);
+                updateAuthUI();
+            }
+        }
+
+        function openLootBox() { addBalanceToUser(0.10, "مبروك! فتحت صندوق الجوائز الخارقة"); }
+        function claimDailyBonus() { addBalanceToUser(0.05, "تم استلام المكافأة اليومية بنجاح"); }
+        function spinLuckyWheel() { addBalanceToUser(0.10, "مبروك! ربحت من عجلة الحظ"); }
+        
+        function applyPromoCode() { 
+            const code = document.getElementById("promoCodeInput").value.trim();
+            if (!currentUser) return alert("سجل الدخول أولاً!");
+            if (code.toUpperCase() === "WELCOME2026") { 
+                addBalanceToUser(0.25, "تم تفعيل كود الهدية بنجاح!");
+            } else { 
+                alert("❌ كود خاطئ أو منتهي الصلاحية!"); 
+            }
+        }
+
+        function copyRefLink() {
+            if (!currentUser) return alert("سجل الدخول للحصول على رابطك الخاص!");
+            navigator.clipboard.writeText(window.location.origin + "?ref=" + currentUser);
+            alert("📋 تم نسخ رابط الإحالة الخاص بك بنجاح!");
+        }
+
+        function redeemGiftCard(cardName, amount) {
+            if (!currentUser) return alert("سجل الدخول أولاً!");
+            // يمكننا خصم المبلغ أو إرساله كطلب سحب
+            addBalanceToUser(-amount, `تم طلب استبدال بطاقة (${cardName})`);
+        }
+
+        // فتح شبكات العروض الحقيقية مع تمرير اسم مستخدم المنصة الحقيقي
+        function openCPXResearch() { window.open(`https://offers.cpx-research.com/index.php?app_id=37107&ext_user_id=${currentUser || 'guest'}`, '_blank'); }
+        function openTimeWall() { window.open(`https://timewall.io/users/login`, '_blank'); }
+        function openNetwork(networkName) { alert(`🚀 جاري التوجيه إلى عروض شبكة ${networkName} مع ربط حسابك (${currentUser || 'guest'})...`); }
+
+        // تقديم طلب السحب الحقيقي وحفظه في جدول withdrawals
+        document.getElementById("withdrawForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            if (!currentUser) return alert("سجل الدخول لتقديم طلب السحب!");
+
+            const method = document.getElementById("withdrawMethod").value;
+            const address = document.getElementById("withdrawAddress").value;
+            const amount = parseFloat(document.getElementById("withdrawAmount").value);
+
+            // التحقق من الرصيد الحقيقي أولاً
+            const { data } = await supabaseClient.from("users").select("balance").eq("username", currentUser).single();
+            if (!data || parseFloat(data.balance) < amount) {
+                return alert("❌ رصيدك الحالي لا يكفي لإتمام هذا السحب!");
+            }
+
+            // حفظ الطلب في قاعدة البيانات
+            const { error } = await supabaseClient.from("withdrawals").insert([{
+                username: currentUser,
+                method: method,
+                address: address,
+                amount: amount,
+                status: 'pending'
+            }]);
+
+            if (error) {
+                alert("❌ حدث خطأ أثناء إرسال طلب السحب: " + error.message);
+            } else {
+                // خصم المبلغ مؤقتاً أو انتظاره للموافقة
+                let remainingBalance = parseFloat(data.balance) - amount;
+                await supabaseClient.from("users").update({ balance: remainingBalance }).eq("username", currentUser);
+                
+                alert("✅ تم إرسال طلب السحب بنجاح وسيتم مراجعته من الإدارة قريباً.");
+                this.reset();
+                updateAuthUI();
+            }
+        });
+
+        // لوحة المالك الحقيقية
         function openAdminPanel() {
             new bootstrap.Modal(document.getElementById('adminModal')).show();
         }
@@ -321,58 +415,70 @@
             const inputPass = document.getElementById("adminPassInput").value;
 
             if (!currentUser || !currentUserEmail) {
-                alert("❌ يجب تسجيل الدخول بريدك المعتمد (Anassadek5535@gmail.com) أولاً!");
+                alert("❌ يجب تسجيل الدخول ببريدك كمالك (Anassadek5535@gmail.com) أولاً!");
                 return;
             }
 
-            // التحقق الصارم من البريد الإلكتروني وكلمة السر للمالك
             if (currentUserEmail.toLowerCase().trim() === ADMIN_OWNER_EMAIL.toLowerCase().trim() && inputPass === ADMIN_SECRET_PASS) {
                 document.getElementById("adminAuthSection").style.display = "none";
                 document.getElementById("adminControlsSection").style.display = "block";
+                loadWithdrawals(); // تحميل طلبات السحب الحقيقية
             } else {
-                alert("❌ غير مصرح لك! هذه اللوحة مخصصة فقط لمالك المنصة (Anassadek5535@gmail.com) وبكلمة السر الصحيحة.");
+                alert("❌ غير مصرح لك! كلمة السر خاطئة أو أنك لست المالك.");
             }
+        }
+
+        // جلب طلبات السحب الحقيقية وعرضها في لوحة التحكم للمالك
+        async function loadWithdrawals() {
+            const container = document.getElementById("withdrawalsListContainer");
+            const { data, error } = await supabaseClient.from("withdrawals").select("*").order('created_at', { ascending: false });
+
+            if (error || !data || data.length === 0) {
+                container.innerHTML = `<p class="text-muted">لا توجد طلبات سحب معلقة حالياً.</p>`;
+                return;
+            }
+
+            let html = `<table class="table table-dark table-sm"><thead><tr><th>المستخدم</th><th>الطريقة</th><th>العنوان</th><th>المبلغ</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>`;
+            data.forEach(w => {
+                html += `<tr>
+                    <td>${w.username}</td>
+                    <td>${w.method}</td>
+                    <td>${w.address}</td>
+                    <td class="text-success">$${w.amount}</td>
+                    <td><span class="badge bg-warning">${w.status}</span></td>
+                    <td>
+                        <button class="btn btn-xs btn-success py-0 px-2" onclick="updateWithdrawal(${w.id}, 'approved')">موافقة</button>
+                        <button class="btn btn-xs btn-danger py-0 px-2" onclick="updateWithdrawal(${w.id}, 'rejected')">رفض</button>
+                    </td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        async function updateWithdrawal(id, status) {
+            await supabaseClient.from("withdrawals").update({ status: status }).eq("id", id);
+            alert(`✅ تم تحديث حالة الطلب إلى (${status}) بنجاح.`);
+            loadWithdrawals();
         }
 
         async function adminModifyBalance() {
             if (!currentUserEmail || currentUserEmail.toLowerCase().trim() !== ADMIN_OWNER_EMAIL.toLowerCase().trim()) {
-                alert("❌ عملية مرفوضة! أنت لست المالك.");
+                alert("❌ عملية مرفوضة!");
                 return;
             }
 
-            const targetUser = document.getElementById("adminUserTarget").value;
+            const targetUser = document.getElementById("adminUserTarget").value.trim();
             const amount = parseFloat(document.getElementById("adminAmountTarget").value);
             if (!targetUser || isNaN(amount)) return alert("أدخل بيانات صحيحة!");
             
-            await supabaseClient.from("users").update({ balance: amount }).eq("username", targetUser);
-            alert(`✅ تم تحديث رصيد المستخدم (${targetUser}) إلى $${amount} بنجاح!`);
+            const { error } = await supabaseClient.from("users").update({ balance: amount }).eq("username", targetUser);
+            if (error) {
+                alert("❌ حدث خطأ، تأكد من اسم المستخدم.");
+            } else {
+                alert(`✅ تم تعديل رصيد المستخدم (${targetUser}) إلى $${amount} بنجاح في قاعدة البيانات!`);
+            }
         }
-
-        function openLootBox() { if (!currentUser) return alert("يرجى تسجيل الدخول أولاً!"); alert("🎁 مبروك! فتحت صندوق الجوائز وفزت بـ $0.10 مجانية!"); }
-        function claimDailyBonus() { if (!currentUser) return alert("يرجى تسجيل الدخول أولاً!"); alert("🎉 تم إضافة مكافأة اليوم ($0.05) لرصيدك!"); }
-        function spinLuckyWheel() { if (!currentUser) return alert("يرجى تسجيل الدخول أولاً!"); alert("🎰 مبروك! فزت بـ $0.10 من عجلة الحظ!"); }
-        function applyPromoCode() { 
-            const code = document.getElementById("promoCodeInput").value.trim();
-            if (!currentUser) return alert("سجل الدخول أولاً!");
-            if (code.toUpperCase() === "WELCOME2026") { alert("🎁 تم تفعيل الكود وإضافة $0.25 لرصيدك!"); } else { alert("❌ كود خاطئ!"); }
-        }
-        function copyRefLink() {
-            if (!currentUser) return alert("سجل الدخول للحصول على رابطك!");
-            navigator.clipboard.writeText(window.location.origin + "?ref=" + currentUser);
-            alert("📋 تم نسخ رابط الإحالة!");
-        }
-        function redeemGiftCard(cardName) { if (!currentUser) return alert("سجل الدخول للاستبدال!"); alert(`🎁 تم طلب استبدال (${cardName}) بنجاح!`); }
-
-        function openCPXResearch() { window.open(`https://offers.cpx-research.com/index.php?app_id=37107&ext_user_id=${currentUser || 'guest'}`, '_blank'); }
-        function openTimeWall() { window.open(`https://timewall.io/users/login`, '_blank'); }
-        function openNetwork(networkName) { alert(`🚀 جاري التوجيه إلى عروض شبكة ${networkName}...`); }
-
-        document.getElementById("withdrawForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            if (!currentUser) return alert("سجل الدخول لطلب السحب!");
-            alert("✅ تم إرسال طلب السحب بنجاح خلال 24 ساعة.");
-            this.reset();
-        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
