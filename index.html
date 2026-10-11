@@ -22,7 +22,7 @@
 
     <!-- شريط الإشعارات الحية -->
     <div class="ticker-wrap text-center">
-        <span>🔥 15 شبكة عروض عالمية | 💰 نظام أرباح حقيقي وفوري | 🛡️ حماية حظر VPN نشطة | 👑 ملكية وإدارة شاملة للمشرف</span>
+        <span>🔥 15 شبكة عروض عالمية | 💰 نظام أرباح حقيقي وفوري | 🛡️ حماية مشفرة عبر Supabase Auth | 👑 مالك المنصة: أنس صادق</span>
     </div>
 
     <!-- القائمة العلوية -->
@@ -41,7 +41,7 @@
         </div>
     </nav>
 
-    <!-- الهيدر وشريط التقدم -->
+    <!-- الهيدر -->
     <div class="hero-section text-center shadow">
         <div class="container">
             <h1 class="fw-bold mb-2 display-5">منصة الأرباح العالمية الشاملة</h1>
@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        <!-- أزرار المكافآت والبروموكود والإحالة -->
+        <!-- أزرار المكافآت -->
         <div class="row g-3 mb-4">
             <div class="col-md-3">
                 <div class="card feature-card p-3 text-center h-100 shadow-sm">
@@ -114,7 +114,7 @@
             </div>
         </div>
 
-        <!-- التبويبات الرئيسية -->
+        <!-- التبويبات -->
         <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="mainTabs">
             <li class="nav-item"><button class="nav-link active fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#networks-tab">🌐 شبكات العروض الحقيقية</button></li>
             <li class="nav-item"><button class="nav-link fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#giftcards-tab">🎁 بطاقات الهدايا</button></li>
@@ -123,16 +123,12 @@
 
         <div class="tab-content" id="mainTabsContent">
             
-            <!-- شبكات العروض الـ 15 -->
+            <!-- شبكات العروض -->
             <div class="tab-pane fade show active" id="networks-tab">
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📊</div><h5 class="fw-bold">1. CPX Research</h5><p class="text-muted small">استطلاعات رأي عالمية.</p><button class="btn btn-primary fw-bold mt-auto py-2" onclick="openCPXResearch()">🚀 فتح الاستطلاعات</button></div></div>
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📝</div><h5 class="fw-bold">2. TimeWall Tasks</h5><p class="text-muted small">مهام مصغرة وزيارات.</p><button class="btn btn-success fw-bold mt-auto py-2" onclick="openTimeWall()">💼 فتح المهام</button></div></div>
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🎮</div><h5 class="fw-bold">3. BitLabs Offerwall</h5><p class="text-muted small">ألعاب وتطبيقات واستطلاعات.</p><button class="btn btn-warning fw-bold mt-auto py-2" onclick="openNetwork('BitLabs')">⭐ تصفح العروض</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📺</div><h5 class="fw-bold">4. Monlix Offers</h5><p class="text-muted small">إعلانات وزيارة مواضيع.</p><button class="btn btn-info text-white fw-bold mt-auto py-2" onclick="openNetwork('Monlix')">📺 فتح الإعلانات</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📱</div><h5 class="fw-bold">5. AdGate Media</h5><p class="text-muted small">تثبيت ألعاب وتطبيقات.</p><button class="btn btn-danger fw-bold mt-auto py-2" onclick="openNetwork('AdGate Media')">📲 تصفح الألعاب</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🔥</div><h5 class="fw-bold">6. Torox Offers</h5><p class="text-muted small">عروض ألعاب عالمية.</p><button class="btn btn-dark fw-bold mt-auto py-2" onclick="openNetwork('Torox')">🎯 فتح العروض</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">💎</div><h5 class="fw-bold">7. Lootably Wall</h5><p class="text-muted small">فيديوهات وألعاب خفيفة.</p><button class="btn btn-outline-warning text-dark fw-bold mt-auto py-2" onclick="openNetwork('Lootably')">🎬 مشاهدة وكسب</button></div></div>
                 </div>
             </div>
 
@@ -173,19 +169,19 @@
         </div>
     </div>
 
-    <!-- Modal تسجيل كلمة سر المالك للتحويل للوحة الإدارة -->
+    <!-- Modal تسجيل كلمة سر المالك للتحويل للوحة الإدارة المشفرة -->
     <div class="modal fade" id="adminModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title fw-bold">👑 الدخول للوحة التحكم الرئيسية للمالك</h5>
+                    <h5 class="modal-title fw-bold">👑 تسجيل دخول المالك (مشفر وآمن)</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-warning small">⚠️ هذه اللوحة محمية حصرياً للمالك المسجل بالبريد: (Anassadek5535@gmail.com).</p>
+                    <p class="text-warning small">⚠️ لوحة الإدارة محمية ومغلقة تماماً برمجياً لمالك المنصة (Anassadek5535@gmail.com).</p>
                     <label class="form-label fw-bold">أدخل كلمة سر المالك السرية:</label>
-                    <input type="password" id="adminPassInput" class="form-control mb-3" placeholder="كلمة سر الإدارة">
-                    <button class="btn btn-danger w-100 fw-bold" onclick="verifyAdmin()">الانتقال إلى لوحة الإدارة 🚀</button>
+                    <input type="password" id="adminPassInput" class="form-control mb-3" placeholder="كلمة السر الإدارة">
+                    <button class="btn btn-danger w-100 fw-bold" onclick="verifyAdminSecure()">دخول لوحة الإدارة 🚀</button>
                 </div>
             </div>
         </div>
@@ -195,13 +191,13 @@
     <div class="modal fade" id="authModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title fw-bold">تسجيل الحساب أو الدخول بقاعدة البيانات</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-header"><h5 class="modal-title fw-bold">تسجيل الحساب أو الدخول المشفر</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body">
                     <form id="registerForm">
                         <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="regUser" class="form-control" required></div>
                         <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="regEmail" class="form-control" required></div>
                         <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="regPass" class="form-control" required></div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2">تسجيل ودخول المنصة</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2">تسجيل / دخول آمن</button>
                     </form>
                 </div>
             </div>
@@ -213,12 +209,6 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwdWpiZ3lncm51cWdkbnJleGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDA1MDUsImV4cCI6MjEwNzIxNjUwNX0.dmNknj6Sg3MTFGjAcyCHiPTyfTWVeyEPBgEe5oVZGGU";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentUser = localStorage.getItem("currentUser") || null;
-        let currentUserEmail = localStorage.getItem("currentUserEmail") || null;
-        
-        const ADMIN_OWNER_EMAIL = "Anassadek5535@gmail.com"; 
-        const ADMIN_SECRET_PASS = "01093083973";
-
         document.addEventListener("DOMContentLoaded", function() { updateAuthUI(); });
 
         function toggleTheme() {
@@ -229,16 +219,16 @@
         }
 
         async function updateAuthUI() {
-            if (currentUser) {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (user) {
                 document.getElementById("authNavBtn").style.display = "none";
                 document.getElementById("logoutBtn").style.display = "inline";
                 document.getElementById("userBalanceContainer").style.display = "inline";
                 
-                const { data } = await supabaseClient.from("users").select("balance, email").eq("username", currentUser).single();
+                const { data } = await supabaseClient.from("users").select("balance, username").eq("email", user.email).single();
                 if (data) { 
                     document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
-                    currentUserEmail = data.email;
-                    localStorage.setItem("currentUserEmail", data.email);
+                    document.getElementById("authNavBtn").innerText = data.username;
                 }
             } else {
                 document.getElementById("authNavBtn").style.display = "inline";
@@ -247,59 +237,50 @@
             }
         }
 
-        function logoutUser() {
-            localStorage.clear();
-            currentUser = null;
-            currentUserEmail = null;
+        async function logoutUser() {
+            await supabaseClient.auth.signOut();
             alert("✅ تم تسجيل الخروج بنجاح.");
             location.reload();
         }
 
+        // نظام التسجيل والدخول عبر Supabase Auth
         document.getElementById("registerForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             const u = document.getElementById("regUser").value.trim();
             const em = document.getElementById("regEmail").value.trim();
             const p = document.getElementById("regPass").value;
             
-            const { data: existingUser } = await supabaseClient.from("users").select("*").eq("username", u).single();
-            
-            if (existingUser) {
-                if (existingUser.password === p) {
-                    currentUser = u;
-                    currentUserEmail = existingUser.email;
-                    localStorage.setItem("currentUser", u);
-                    localStorage.setItem("currentUserEmail", existingUser.email);
-                    alert("✅ أهلاً بك مجدداً، تم تسجيل الدخول بنجاح!");
-                } else {
-                    alert("❌ كلمة السر غير صحيحة لهذا المستخدم!");
+            let { data, error } = await supabaseClient.auth.signUp({
+                email: em,
+                password: p,
+                options: { data: { username: u } }
+            });
+
+            if (error) {
+                let signInRes = await supabaseClient.auth.signInWithPassword({ email: em, password: p });
+                if (signInRes.error) {
+                    alert("❌ خطأ: " + signInRes.error.message);
                     return;
                 }
+                alert("✅ أهلاً بك مجدداً، تم تسجيل الدخول بنجاح!");
             } else {
-                const { error } = await supabaseClient.from("users").insert([{ username: u, email: em, password: p, balance: 0 }]);
-                if (error) {
-                    alert("❌ خطأ أثناء التسجيل: " + error.message);
-                    return;
-                }
-                currentUser = u;
-                currentUserEmail = em;
-                localStorage.setItem("currentUser", u);
-                localStorage.setItem("currentUserEmail", em);
-                alert("🎉 تم إنشاء الحساب بنجاح وأهلاً بك في المنصة!");
+                await supabaseClient.from("users").upsert([{ username: u, email: em, balance: 0 }]);
+                alert("🎉 تم إنشاء الحساب وتسجيل الدخول بنجاح!");
             }
 
-            updateAuthUI();
-            bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
+            location.reload();
         });
 
         async function addBalanceToUser(amount, message) {
-            if (!currentUser) return alert("يرجى تسجيل الدخول أولاً لتتمكن من ربح الأرصدة الحقيقية!");
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) return alert("يرجى تسجيل الدخول أولاً لتتمكن من ربح الأرصدة الحقيقية!");
             
-            const { data } = await supabaseClient.from("users").select("balance").eq("username", currentUser).single();
+            const { data } = await supabaseClient.from("users").select("balance").eq("email", user.email).single();
             if (!data) return alert("خطأ في جلب بيانات المستخدم!");
 
             let newBalance = parseFloat(data.balance || 0) + parseFloat(amount);
-
-            const { error } = await supabaseClient.from("users").update({ balance: newBalance }).eq("username", currentUser);
+            const { error } = await supabaseClient.from("users").update({ balance: newBalance }).eq("email", user.email);
+            
             if (error) {
                 alert("❌ حدث خطأ أثناء تحديث الرصيد.");
             } else {
@@ -314,7 +295,6 @@
         
         function applyPromoCode() { 
             const code = document.getElementById("promoCodeInput").value.trim();
-            if (!currentUser) return alert("سجل الدخول أولاً!");
             if (code.toUpperCase() === "WELCOME2026") { 
                 addBalanceToUser(0.25, "تم تفعيل كود الهدية بنجاح!");
             } else { 
@@ -322,36 +302,38 @@
             }
         }
 
-        function copyRefLink() {
-            if (!currentUser) return alert("سجل الدخول للحصول على رابطك الخاص!");
-            navigator.clipboard.writeText(window.location.origin + "?ref=" + currentUser);
+        async function copyRefLink() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) return alert("سجل الدخول للحصول على رابطك الخاص!");
+            const { data } = await supabaseClient.from("users").select("username").eq("email", user.email).single();
+            navigator.clipboard.writeText(window.location.origin + "?ref=" + (data ? data.username : 'user'));
             alert("📋 تم نسخ رابط الإحالة الخاص بك بنجاح!");
         }
 
         function redeemGiftCard(cardName, amount) {
-            if (!currentUser) return alert("سجل الدخول أولاً!");
             addBalanceToUser(-amount, `تم طلب استبدال بطاقة (${cardName})`);
         }
 
-        function openCPXResearch() { window.open(`https://offers.cpx-research.com/index.php?app_id=37107&ext_user_id=${currentUser || 'guest'}`, '_blank'); }
+        function openCPXResearch() { window.open(`https://offers.cpx-research.com/index.php?app_id=37107`, '_blank'); }
         function openTimeWall() { window.open(`https://timewall.io/users/login`, '_blank'); }
-        function openNetwork(networkName) { alert(`🚀 جاري التوجيه إلى عروض شبكة ${networkName} مع ربط حسابك (${currentUser || 'guest'})...`); }
+        function openNetwork(networkName) { alert(`🚀 جاري التوجيه إلى عروض شبكة ${networkName}...`); }
 
         document.getElementById("withdrawForm").addEventListener("submit", async function(e) {
             e.preventDefault();
-            if (!currentUser) return alert("سجل الدخول لتقديم طلب السحب!");
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) return alert("سجل الدخول لتقديم طلب السحب!");
 
             const method = document.getElementById("withdrawMethod").value;
             const address = document.getElementById("withdrawAddress").value;
             const amount = parseFloat(document.getElementById("withdrawAmount").value);
 
-            const { data } = await supabaseClient.from("users").select("balance").eq("username", currentUser).single();
+            const { data } = await supabaseClient.from("users").select("balance, username").eq("email", user.email).single();
             if (!data || parseFloat(data.balance) < amount) {
                 return alert("❌ رصيدك الحالي لا يكفي لإتمام هذا السحب!");
             }
 
             const { error } = await supabaseClient.from("withdrawals").insert([{
-                username: currentUser,
+                username: data.username,
                 method: method,
                 address: address,
                 amount: amount,
@@ -362,7 +344,7 @@
                 alert("❌ حدث خطأ أثناء إرسال طلب السحب: " + error.message);
             } else {
                 let remainingBalance = parseFloat(data.balance) - amount;
-                await supabaseClient.from("users").update({ balance: remainingBalance }).eq("username", currentUser);
+                await supabaseClient.from("users").update({ balance: remainingBalance }).eq("email", user.email);
                 
                 alert("✅ تم إرسال طلب السحب بنجاح وسيتم مراجعته من الإدارة قريباً.");
                 this.reset();
@@ -370,24 +352,30 @@
             }
         });
 
-        // 👑 دالة فتح لوحة التحكم والتحقق من المالك ثم التحويل إلى admin.html
         function openAdminPanel() {
             new bootstrap.Modal(document.getElementById('adminModal')).show();
         }
 
-        async function verifyAdmin() {
-            const inputPass = document.getElementById("adminPassInput").value;
+        // 👑 التحقق المشفر من المالك عبر Supabase Auth
+        async function verifyAdminSecure() {
+            const pass = document.getElementById("adminPassInput").value;
+            const ownerEmail = "Anassadek5535@gmail.com";
 
-            if (!currentUser || !currentUserEmail) {
-                alert("❌ يجب تسجيل الدخول ببريدك كمالك (Anassadek5535@gmail.com) أولاً!");
+            // محاولة تسجيل الدخول كمشرف عبر Supabase Auth
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
+                email: ownerEmail,
+                password: pass
+            });
+
+            if (error) {
+                alert("❌ غير مصرح لك! كلمة المرور غير صحيحة أو الحساب غير موجود في قاعدة بيانات السيرفر.");
                 return;
             }
 
-            if (currentUserEmail.toLowerCase().trim() === ADMIN_OWNER_EMAIL.toLowerCase().trim() && inputPass === ADMIN_SECRET_PASS) {
-                localStorage.setItem("adminSession", "active");
-                window.location.href = "admin.html"; // تحويلك مباشرة لصفحة الإدارة المستقلة
+            if (data.user && data.user.email.toLowerCase() === ownerEmail.toLowerCase()) {
+                window.location.href = "admin.html"; // توجيه آمن ومشفر للوحة التحكم
             } else {
-                alert("❌ غير مصرح لك! كلمة السر خاطئة أو أنك لست المالك.");
+                alert("❌ خطأ في الصلاحيات.");
             }
         }
     </script>
