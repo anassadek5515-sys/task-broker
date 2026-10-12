@@ -3,198 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earn Universe Pro | Enterprise Global Platform</title>
+    <title>Earn Universe Pro | Global Enterprise Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* حماية CSS لمنع تحديد النصوص والعناصر أو نسخها */
-        * {
-            -webkit-user-select: none !important;
-            -moz-user-select: none !important;
-            -ms-user-select: none !important;
-            user-select: none !important;
-        }
-        input, textarea {
-            -webkit-user-select: text !important;
-            -moz-user-select: text !important;
-            -ms-user-select: text !important;
-            user-select: text !important;
-        }
-        :root { --main-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0e14; color: #e0e6ed; }
-        .hero-section { background: var(--main-gradient); color: white; padding: 50px 0; border-bottom: 2px solid #0d6efd; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; }
-        .feature-card { transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; background: #151c24; }
-        .feature-card:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(13, 110, 253, 0.2); border-color: #0d6efd; }
-        .ticker-wrap { background: #000; color: #ffd700; padding: 10px 0; font-size: 0.88rem; font-weight: bold; border-bottom: 1px solid #333; }
-        .streak-box { border: 2px dashed #0d6efd; border-radius: 12px; padding: 10px; text-align: center; background: rgba(13, 110, 253, 0.05); }
-        .loot-box { cursor: pointer; border: 2px #ffd700 solid; border-radius: 18px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,140,0,0.15)); transition: 0.3s; }
-        .loot-box:hover { transform: scale(1.03); box-shadow: 0 0 25px rgba(255,215,0,0.4); }
+        * { -webkit-user-select: none !important; user-select: none !important; }
+        input, textarea { -webkit-user-select: text !important; user-select: text !important; }
+        :root { --primary-glow: #0d6efd; --bg-main: #07090e; --card-bg: rgba(21, 28, 38, 0.75); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-main); color: #e2e8f0; }
+        .glass-card { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); transition: 0.3s; }
+        .glass-card:hover { transform: translateY(-4px); border-color: rgba(13, 110, 253, 0.4); box-shadow: 0 20px 40px rgba(13,110,253,0.15); }
+        .hero-banner { background: linear-gradient(135deg, #091325, #12223d, #1b365d); border-bottom: 2px solid #0d6efd; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; padding: 60px 0; }
+        .live-ticker { background: #000; color: #38bdf8; font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .loot-box { cursor: pointer; background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,140,0,0.1)); border: 2px dashed #ffd700; border-radius: 20px; transition: 0.3s; }
+        .loot-box:hover { transform: scale(1.02); box-shadow: 0 0 25px rgba(255,215,0,0.3); }
+        .toast-container { position: fixed; bottom: 20px; left: 20px; z-index: 9999; }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
 
-    <div class="ticker-wrap text-center">
-        <span>🔥 15 شبكة عروض عالمية مدمجة | 💰 نظام مكافآت وأرباح فوري | 🛡️ حماية وتشفير سحابي متقدم</span>
+    <!-- شريط السحوبات الحية -->
+    <div class="live-ticker text-center overflow-hidden">
+        <span id="liveTickerText">⚡ محمد من مصر سحب $5.00 عبر فودافون كاش | 🚀 يوسف أكمل عرض CPX Research وربح $1.20</span>
     </div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
+    <!-- النافبار العصري -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm border-bottom border-secondary opacity-95">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary fs-4" href="#">Earn<span class="text-white">Universe Pro</span></a>
             <div class="d-flex align-items-center gap-2">
-                <button class="btn btn-outline-warning btn-sm me-1" id="themeToggleBtn" onclick="toggleTheme()">☀️ المظهر</button>
+                <span class="badge bg-primary px-3 py-2" id="userLevelBadge" style="display:none;">⭐ Level 1</span>
                 <span class="text-white small" id="userBalanceContainer" style="display:none;">
                     💰 الرصيد: <strong class="text-success fs-6" id="balanceVal">$0.00</strong>
                 </span>
-                <button class="btn btn-outline-light btn-sm fw-bold" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول / حساب جديد</button>
+                <button class="btn btn-outline-light btn-sm fw-bold px-3" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول</button>
                 <button class="btn btn-outline-danger btn-sm fw-bold" id="logoutBtn" style="display:none;" onclick="logoutUser()">خروج</button>
             </div>
         </div>
     </nav>
 
-    <div class="hero-section text-center shadow">
+    <!-- الهيدر الفخم -->
+    <div class="hero-banner text-center shadow-lg">
         <div class="container">
-            <h1 class="fw-bold mb-2 display-5">منصة الأرباح والخدمات العالمية الشاملة</h1>
-            <p class="lead mb-0 text-light opacity-75">بنية سحابية مؤسسية لإدارة العروض والإحالات والتدفقات المالية.</p>
+            <h1 class="fw-bold mb-2 display-5 text-white">منصة الأرباح والخدمات المؤسسية</h1>
+            <p class="lead text-light opacity-75">أضخم بنية سحابية متكاملة للعروض، الألعاب، والتدفقات المالية الآمنة.</p>
         </div>
     </div>
 
     <div class="container my-5">
-        <div class="row g-3 mb-4">
-            <div class="col-md-8">
-                <div class="card p-3 border-0 shadow-sm h-100 feature-card">
-                    <h6 class="fw-bold mb-2 text-warning">🔥 سجل الدخول اليومي (مكافأة حقيقية):</h6>
+        
+        <!-- قسم المكافآت وصندوق الحظ -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="glass-card p-4 h-100">
+                    <h5 class="fw-bold mb-3 text-warning">🔥 مكافأة تسجيل الدخول اليومي:</h5>
                     <div class="row g-2 text-center">
-                        <div class="col"><div class="streak-box"><strong>اليوم 1</strong><br><small class="text-success">+$0.02</small></div></div>
-                        <div class="col"><div class="streak-box"><strong>اليوم 2</strong><br><small class="text-success">+$0.04</small></div></div>
-                        <div class="col"><div class="streak-box"><strong>اليوم 3</strong><br><small class="text-success">+$0.06</small></div></div>
-                        <div class="col"><div class="streak-box"><strong>اليوم 4</strong><br><small class="text-success">+$0.08</small></div></div>
-                        <div class="col"><div class="streak-box"><strong>اليوم 5</strong><br><small class="text-success">+$0.10</small></div></div>
-                        <div class="col"><div class="streak-box"><strong>اليوم 6</strong><br><small class="text-success">+$0.15</small></div></div>
-                        <div class="col"><div class="streak-box bg-primary text-white"><strong>اليوم 7 🎉</strong><br><small>+$0.50</small></div></div>
+                        <div class="col"><div class="p-2 border border-secondary rounded bg-dark"><strong>يوم 1</strong><br><small class="text-success">+$0.02</small></div></div>
+                        <div class="col"><div class="p-2 border border-secondary rounded bg-dark"><strong>يوم 2</strong><br><small class="text-success">+$0.04</small></div></div>
+                        <div class="col"><div class="p-2 border border-secondary rounded bg-dark"><strong>يوم 3</strong><br><small class="text-success">+$0.06</small></div></div>
+                        <div class="col"><div class="p-2 border border-secondary rounded bg-dark"><strong>يوم 4</strong><br><small class="text-success">+$0.08</small></div></div>
+                        <div class="col"><div class="p-2 border border-secondary rounded bg-dark"><strong>يوم 5</strong><br><small class="text-success">+$0.10</small></div></div>
+                        <div class="col"><div class="p-2 border border-secondary rounded bg-dark"><strong>يوم 6</strong><br><small class="text-success">+$0.15</small></div></div>
+                        <div class="col"><div class="p-2 border border-primary rounded bg-primary text-white"><strong>يوم 7 🎉</strong><br><small>+$0.50</small></div></div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-4">
-                <div class="card loot-box p-3 text-center h-100 shadow d-flex flex-column justify-content-center align-items-center" onclick="openLootBox()">
-                    <div class="fs-1">🎁</div>
-                    <h6 class="fw-bold text-warning mb-1">صندوق الجوائز اليومي</h6>
-                    <small class="text-light opacity-75">اضغط لاستلام المكافأة السريعة مباشرة</small>
+            <div class="col-lg-4">
+                <div class="loot-box p-4 text-center h-100 d-flex flex-column justify-content-center align-items-center" onclick="openLootBox()">
+                    <div class="display-4 mb-2">🎁</div>
+                    <h5 class="fw-bold text-warning mb-1">صندوق الجوائز الفوري</h5>
+                    <small class="text-light opacity-75">اضغط لاختبار حظك واستلام هدية اليوم</small>
                 </div>
             </div>
         </div>
 
+        <!-- خدمات سريعة -->
         <div class="row g-3 mb-4">
             <div class="col-md-3">
-                <div class="card feature-card p-3 text-center h-100 shadow-sm">
-                    <div class="fs-3 mb-1">🎁</div>
+                <div class="glass-card p-3 text-center h-100">
+                    <div class="fs-2 mb-2">🎁</div>
                     <h6 class="fw-bold mb-1">المكافأة اليومية</h6>
-                    <small class="text-muted mb-2">استلم $0.05 مباشرة</small>
-                    <button class="btn btn-warning btn-sm fw-bold mt-auto" onclick="claimDailyBonus()">استلام $0.05</button>
+                    <small class="text-muted d-block mb-2">+$0.05 مجاناً</small>
+                    <button class="btn btn-warning btn-sm w-100 fw-bold mt-auto" onclick="claimDailyBonus()">استلام</button>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card feature-card p-3 text-center h-100 shadow-sm">
-                    <div class="fs-3 mb-1">🎰</div>
+                <div class="glass-card p-3 text-center h-100">
+                    <div class="fs-2 mb-2">🎰</div>
                     <h6 class="fw-bold mb-1">عجلة الحظ</h6>
-                    <small class="text-muted mb-2">اربح حتى $1.00 مجاناً</small>
-                    <button class="btn btn-primary btn-sm fw-bold mt-auto" onclick="spinLuckyWheel()">تدوير العجلة</button>
+                    <small class="text-muted d-block mb-2">اربح حتى $1.00</small>
+                    <button class="btn btn-primary btn-sm w-100 fw-bold mt-auto" onclick="spinLuckyWheel()">تدوير</button>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card feature-card p-3 text-center h-100 shadow-sm">
-                    <div class="fs-3 mb-1">🏷️</div>
-                    <h6 class="fw-bold mb-1">كود الهدية (Promo Code)</h6>
-                    <div class="input-group input-group-sm mt-1">
-                        <input type="text" id="promoCodeInput" class="form-control" placeholder="أدخل الكود">
-                        <button class="btn btn-dark" onclick="applyPromoCode()">تطبيق</button>
+                <div class="glass-card p-3 text-center h-100">
+                    <div class="fs-2 mb-1">🏷️</div>
+                    <h6 class="fw-bold mb-1">كود هدية (Promo)</h6>
+                    <div class="input-group input-group-sm mt-2">
+                        <input type="text" id="promoCodeInput" class="form-control" placeholder="الكود">
+                        <button class="btn btn-dark" onclick="applyPromoCode()">تفعيل</button>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card feature-card p-3 text-center h-100 shadow-sm">
-                    <div class="fs-3 mb-1">🔗</div>
-                    <h6 class="fw-bold mb-1">رابط الشراكة (الإحالة)</h6>
-                    <button class="btn btn-outline-primary btn-sm mt-auto fw-bold" onclick="copyRefLink()">نسخ رابط الإحالة</button>
+                <div class="glass-card p-3 text-center h-100">
+                    <div class="fs-2 mb-2">🔗</div>
+                    <h6 class="fw-bold mb-1">نظام الإحالات</h6>
+                    <small class="text-muted d-block mb-2">اربح نسبة من أصدقائك</small>
+                    <button class="btn btn-outline-primary btn-sm w-100 fw-bold mt-auto" onclick="copyRefLink()">نسخ الرابط</button>
                 </div>
             </div>
         </div>
 
+        <!-- التبويبات الفخمة -->
         <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="mainTabs">
-            <li class="nav-item"><button class="nav-link active fw-bold px-4 py-2 shadow" data-bs-toggle="tab" data-bs-target="#networks-tab">🌐 شبكات العروض العالمية</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-4 py-2 shadow" data-bs-toggle="tab" data-bs-target="#giftcards-tab">🎁 بطاقات الهدايا</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-4 py-2 shadow" data-bs-toggle="tab" data-bs-target="#withdraw-tab">💳 سحب الأرباح الفوري</button></li>
+            <li class="nav-item"><button class="nav-link active fw-bold px-4 py-2 shadow-sm" data-bs-toggle="tab" data-bs-target="#networks-tab">🌐 شبكات العروض العالمية</button></li>
+            <li class="nav-item"><button class="nav-link fw-bold px-4 py-2 shadow-sm" data-bs-toggle="tab" data-bs-target="#giftcards-tab">🎁 بطاقات الهدايا</button></li>
+            <li class="nav-item"><button class="nav-link fw-bold px-4 py-2 shadow-sm" data-bs-toggle="tab" data-bs-target="#withdraw-tab">💳 سحب الأرباح الفوري</button></li>
         </ul>
 
         <div class="tab-content" id="mainTabsContent">
             <div class="tab-pane fade show active" id="networks-tab">
                 <div class="row g-4 justify-content-center">
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow"><div class="fs-1 mb-2">📊</div><h5 class="fw-bold">1. CPX Research</h5><p class="text-muted small">استطلاعات رأي عالمية مدمجة.</p><button class="btn btn-primary fw-bold mt-auto py-2" onclick="openCPXResearch()">🚀 فتح الاستطلاعات</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow"><div class="fs-1 mb-2">📝</div><h5 class="fw-bold">2. TimeWall Tasks</h5><p class="text-muted small">مهام مصغرة وزيارات آمنة.</p><button class="btn btn-success fw-bold mt-auto py-2" onclick="openTimeWall()">💼 فتح المهام</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow"><div class="fs-1 mb-2">🎮</div><h5 class="fw-bold">3. BitLabs Offerwall</h5><p class="text-muted small">ألعاب وتطبيقات واستطلاعات موثوقة.</p><button class="btn btn-warning fw-bold mt-auto py-2" onclick="openNetwork('BitLabs')">⭐ تصفح العروض</button></div></div>
+                    <div class="col-md-4"><div class="glass-card p-4 text-center h-100"><div class="display-5 mb-3">📊</div><h5 class="fw-bold text-white">CPX Research</h5><p class="text-muted small">استطلاعات رأي عالمية بأجر عالي.</p><button class="btn btn-primary w-100 fw-bold mt-auto py-2" onclick="openCPX()">🚀 فتح الاستطلاعات</button></div></div>
+                    <div class="col-md-4"><div class="glass-card p-4 text-center h-100"><div class="display-5 mb-3">📝</div><h5 class="fw-bold text-white">TimeWall Tasks</h5><p class="text-muted small">مهام مصغرة وزيارات فورية.</p><button class="btn btn-success w-100 fw-bold mt-auto py-2" onclick="openTimeWall()">💼 فتح المهام</button></div></div>
+                    <div class="col-md-4"><div class="glass-card p-4 text-center h-100"><div class="display-5 mb-3">🎮</div><h5 class="fw-bold text-white">BitLabs Offerwall</h5><p class="text-muted small">ألعاب وتطبيقات وعروض مميزة.</p><button class="btn btn-warning w-100 fw-bold mt-auto py-2" onclick="openNetwork('BitLabs')">⭐ تصفح العروض</button></div></div>
                 </div>
             </div>
 
             <div class="tab-pane fade" id="giftcards-tab">
                 <div class="row g-4 justify-content-center">
-                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow"><div class="fs-1 mb-2">💳</div><h6 class="fw-bold">Google Play $5.00</h6><button class="btn btn-outline-success fw-bold mt-auto" onclick="redeemGiftCard('Google Play $5', 5.0)">استبدال النقاط</button></div></div>
-                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow"><div class="fs-1 mb-2">🔥</div><h6 class="fw-bold">Free Fire Diamonds</h6><button class="btn btn-outline-danger fw-bold mt-auto" onclick="redeemGiftCard('Free Fire', 2.0)">شحن الآن</button></div></div>
+                    <div class="col-md-3"><div class="glass-card p-4 text-center h-100"><div class="fs-1 mb-2">💳</div><h6 class="fw-bold">Google Play $5</h6><button class="btn btn-outline-success btn-sm w-100 fw-bold mt-auto" onclick="redeemGiftCard('Google Play $5', 5.0)">استبدال</button></div></div>
+                    <div class="col-md-3"><div class="glass-card p-4 text-center h-100"><div class="fs-1 mb-2">🔥</div><h6 class="fw-bold">Free Fire Diamonds</h6><button class="btn btn-outline-danger btn-sm w-100 fw-bold mt-auto" onclick="redeemGiftCard('Free Fire', 2.0)">شحن</button></div></div>
                 </div>
             </div>
 
             <div class="tab-pane fade" id="withdraw-tab">
-                <div class="card p-4 border-0 shadow mx-auto feature-card" style="max-width: 600px;">
+                <div class="glass-card p-4 mx-auto" style="max-width: 600px;">
                     <h4 class="fw-bold mb-3 text-center text-primary">💳 سحب الأرباح الفوري</h4>
                     <form id="withdrawForm">
                         <div class="mb-3">
                             <label class="form-label fw-bold">طريقة الدفع:</label>
-                            <select class="form-select" id="withdrawMethod" required>
+                            <select class="form-select bg-dark text-white border-secondary" id="withdrawMethod" required>
                                 <option value="vodafone">فودافون كاش / المحافظ المحلية ($1.00 حد أدنى)</option>
                                 <option value="payeer">Payeer ($2.00 حد أدنى)</option>
-                                <option value="usdt">عملات رقمية USDT - TRC20 ($5.00 حد أدنى)</option>
+                                <option value="usdt">USDT - TRC20 ($5.00 حد أدنى)</option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">رقم المحفظة أو العنوان:</label>
-                            <input type="text" class="form-control" id="withdrawAddress" placeholder="أدخل بيانات المحفظة بدقة" required>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" id="withdrawAddress" placeholder="أدخل بيانات المحفظة بدقة" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">المبلغ المطلوب ($):</label>
-                            <input type="number" step="0.1" min="1" class="form-control" id="withdrawAmount" placeholder="0.00" required>
+                            <input type="number" step="0.1" min="1" class="form-control bg-dark text-white border-secondary" id="withdrawAmount" placeholder="0.00" required>
                         </div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow">إرسال طلب السحب</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow">إرسال طلب السحب الفوري</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal المصادقة -->
+    <!-- نافذة المصادقة الفخمة -->
     <div class="modal fade" id="authModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-white border-secondary">
+            <div class="modal-content glass-card border-secondary text-white">
                 <div class="modal-header border-secondary">
-                    <ul class="nav nav-tabs card-header-tabs w-100" id="authTab" role="tablist">
-                        <li class="nav-item w-50 text-center"><button class="nav-link active fw-bold w-100 text-white" data-bs-toggle="tab" data-bs-target="#login-panel" type="button">تسجيل الدخول</button></li>
-                        <li class="nav-item w-50 text-center"><button class="nav-link fw-bold w-100 text-white" data-bs-toggle="tab" data-bs-target="#signup-panel" type="button">حساب جديد</button></li>
+                    <ul class="nav nav-tabs card-header-tabs w-100" role="tablist">
+                        <li class="nav-item w-50 text-center"><button class="nav-link active fw-bold w-100 text-white" data-bs-toggle="tab" data-bs-target="#login-panel">دخول</button></li>
+                        <li class="nav-item w-50 text-center"><button class="nav-link fw-bold w-100 text-white" data-bs-toggle="tab" data-bs-target="#signup-panel">حساب جديد</button></li>
                     </ul>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body p-4">
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="login-panel">
                             <form id="loginForm">
-                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="loginEmail" class="form-control" required placeholder="name@example.com"></div>
-                                <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="loginPass" class="form-control" required placeholder="******"></div>
-                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow">دخول المنصة</button>
+                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="loginEmail" class="form-control bg-dark text-white border-secondary" required></div>
+                                <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="loginPass" class="form-control bg-dark text-white border-secondary" required></div>
+                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2">تسجيل الدخول</button>
                             </form>
                         </div>
                         <div class="tab-pane fade" id="signup-panel">
                             <form id="signupForm">
-                                <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="signupUser" class="form-control" required placeholder="User"></div>
-                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="signupEmail" class="form-control" required placeholder="name@example.com"></div>
-                                <div class="mb-3"><label class="form-label">كلمة السر (6 أحرف فأكثر)</label><input type="password" id="signupPass" class="form-control" required minlength="6" placeholder="******"></div>
-                                <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow">إنشاء حساب فوري</button>
+                                <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="signupUser" class="form-control bg-dark text-white border-secondary" required></div>
+                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="signupEmail" class="form-control bg-dark text-white border-secondary" required></div>
+                                <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="signupPass" class="form-control bg-dark text-white border-secondary" required minlength="6"></div>
+                                <button type="submit" class="btn btn-success w-100 fw-bold py-2">إنشاء حساب فوري</button>
                             </form>
                         </div>
                     </div>
@@ -203,20 +199,16 @@
         </div>
     </div>
 
+    <!-- نظام التنبيهات العائمة -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <script>
-        // 🔒 نظام الحماية والأمان ضد السرقة وفحص أدوات المطورين
-        document.addEventListener('keydown', function (e) {
-            if (
-                e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
-                (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
-            ) {
-                e.preventDefault();
-                return false;
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','i','J','j','C','c'].includes(e.key)) || (e.ctrlKey && ['U','u','S','s'].includes(e.key))) {
+                e.preventDefault(); return false;
             }
         });
-
-        document.addEventListener('copy', (e) => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
 
         const SUPABASE_URL = "https://fpujbgygrnuqgdnrexcx.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwdWpiZ3lncm51cWdkbnJleGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDA1MDUsImV4cCI6MjEwNzIxNjUwNX0.dmNknj6Sg3MTFGjAcyCHiPTyfTWVeyEPBgEe5oVZGGU";
@@ -224,16 +216,18 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const refCode = urlParams.get('ref');
-        if (refCode) {
-            localStorage.setItem('invited_by', refCode);
-        }
+        if (refCode) localStorage.setItem('invited_by', refCode);
 
         document.addEventListener("DOMContentLoaded", () => updateAuthUI());
 
-        function toggleTheme() {
-            const isDark = document.documentElement.getAttribute("data-bs-theme") === "dark";
-            document.documentElement.setAttribute("data-bs-theme", isDark ? "light" : "dark");
-            document.getElementById("themeToggleBtn").innerText = isDark ? "🌙 المظهر" : "☀️ المظهر";
+        function showToast(msg, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type === 'success' ? 'success' : 'danger'} shadow-lg py-2 px-3 mb-2 fw-bold`;
+            toast.style.minWidth = "250px";
+            toast.innerHTML = msg;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
         }
 
         async function updateAuthUI() {
@@ -242,6 +236,7 @@
                 document.getElementById("authNavBtn").style.display = "none";
                 document.getElementById("logoutBtn").style.display = "inline";
                 document.getElementById("userBalanceContainer").style.display = "inline";
+                document.getElementById("userLevelBadge").style.display = "inline";
 
                 const { data } = await supabaseClient.from("users").select("balance").eq("email", user.email).maybeSingle();
                 if (data) document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
@@ -249,6 +244,7 @@
                 document.getElementById("authNavBtn").style.display = "inline";
                 document.getElementById("logoutBtn").style.display = "none";
                 document.getElementById("userBalanceContainer").style.display = "none";
+                document.getElementById("userLevelBadge").style.display = "none";
             }
         }
 
@@ -263,8 +259,8 @@
                 email: document.getElementById("loginEmail").value.trim(),
                 password: document.getElementById("loginPass").value
             });
-            if (error) alert("❌ خطأ: " + error.message);
-            else { alert("✅ تم تسجيل الدخول بنجاح."); location.reload(); }
+            if (error) showToast("❌ خطأ: " + error.message, 'error');
+            else { showToast("✅ تم تسجيل الدخول بنجاح."); setTimeout(() => location.reload(), 1000); }
         });
 
         document.getElementById("signupForm").addEventListener("submit", async (e) => {
@@ -274,83 +270,70 @@
             const p = document.getElementById("signupPass").value;
             const invitedBy = localStorage.getItem('invited_by') || null;
 
-            const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
-                email: em, 
-                password: p, 
-                options: { 
-                    data: { 
-                        username: u,
-                        referred_by: invitedBy 
-                    } 
-                }
+            const { error: signUpError } = await supabaseClient.auth.signUp({
+                email: em, password: p, options: { data: { username: u, referred_by: invitedBy } }
             });
 
-            if (signUpError) { alert("❌ خطأ: " + signUpError.message); return; }
+            if (signUpError) { showToast("❌ خطأ: " + signUpError.message, 'error'); return; }
 
-            const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-                email: em, password: p
-            });
-
-            if (signInError) { alert("🎉 تم إنشاء الحساب بنجاح!"); }
-            else { 
-                localStorage.removeItem('invited_by');
-                alert("🎉 تم إنشاء الحساب وتسجيل الدخول تلقائياً!"); 
-                location.reload(); 
-            }
+            await supabaseClient.auth.signInWithPassword({ email: em, password: p });
+            localStorage.removeItem('invited_by');
+            showToast("🎉 تم إنشاء الحساب بنجاح!");
+            setTimeout(() => location.reload(), 1000);
         });
 
         async function addBalanceToUser(amount, message) {
             const { data: { user } } = await supabaseClient.auth.getUser();
-            if (!user) return alert("يرجى تسجيل الدخول أولاً!");
+            if (!user) return showToast("⚠️ يرجى تسجيل الدخول أولاً!", 'error');
             
             const { data } = await supabaseClient.from("users").select("balance").eq("email", user.email).maybeSingle();
             let newBalance = (data ? parseFloat(data.balance || 0) : 0) + parseFloat(amount);
 
             const { error } = await supabaseClient.from("users").update({ balance: newBalance }).eq("email", user.email);
-            if (error) alert("❌ خطأ بتحديث الرصيد.");
-            else { alert(`🎉 ${message} (+$${amount})`); updateAuthUI(); }
+            if (error) showToast("❌ خطأ بتحديث الرصيد.", 'error');
+            else { showToast(`🎉 ${message} (+$${amount})`); updateAuthUI(); }
         }
 
-        function openLootBox() { addBalanceToUser(0.10, "صندوق المكافآت"); }
+        function openLootBox() { addBalanceToUser(0.10, "صندوق المكافآت الفوري"); }
         function claimDailyBonus() { addBalanceToUser(0.05, "المكافأة اليومية"); }
         function spinLuckyWheel() { addBalanceToUser(0.10, "عجلة الحظ"); }
         function applyPromoCode() {
             if (document.getElementById("promoCodeInput").value.trim().toUpperCase() === "WELCOME2026") addBalanceToUser(0.25, "كود الهدية");
-            else alert("❌ كود خاطئ!");
+            else showToast("❌ كود خاطئ أو منتهي الصلاحية!", 'error');
         }
 
         async function copyRefLink() {
             const { data: { user } } = await supabaseClient.auth.getUser();
-            if (!user) return alert("سجل الدخول أولاً!");
+            if (!user) return showToast("⚠️ يرجى تسجيل الدخول أولاً!", 'error');
             navigator.clipboard.writeText(window.location.origin + "?ref=" + user.id);
-            alert("📋 تم نسخ رابط الإحالة الخاص بك بنجاح!");
+            showToast("📋 تم نسخ رابط الإحالة الخاص بك بنجاح!");
         }
 
-        function redeemGiftCard(name, amt) { addBalanceToUser(-amt, `استبدال ${name}`); }
-        function openCPXResearch() { window.open(`https://offers.cpx-research.com/index.php?app_id=37107`, '_blank'); }
+        function redeemGiftCard(name, amt) { addBalanceToUser(-amt, `استبدال نقاط بـ ${name}`); }
+        function openCPX() { window.open(`https://offers.cpx-research.com/index.php?app_id=37107`, '_blank'); }
         function openTimeWall() { window.open(`https://timewall.io/users/login`, '_blank'); }
-        function openNetwork(n) { alert(`🚀 جاري التوجيه لشبكة ${n}`); }
+        function openNetwork(n) { showToast(`🚀 جاري توجيهك لشبكة ${n}`); }
 
         document.getElementById("withdrawForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const { data: { user } } = await supabaseClient.auth.getUser();
-            if (!user) return alert("سجل الدخول أولاً!");
+            if (!user) return showToast("⚠️ سجل الدخول أولاً!", 'error');
 
             const method = document.getElementById("withdrawMethod").value;
             const address = document.getElementById("withdrawAddress").value;
             const amount = parseFloat(document.getElementById("withdrawAmount").value);
 
             const { data } = await supabaseClient.from("users").select("balance, username").eq("email", user.email).maybeSingle();
-            if (!data || parseFloat(data.balance || 0) < amount) return alert("❌ رصيدك غير كافٍ!");
+            if (!data || parseFloat(data.balance || 0) < amount) return showToast("❌ رصيدك الحالي غير كافٍ!", 'error');
 
             const { error } = await supabaseClient.from("withdrawals").insert([{
                 username: data.username || 'user', method, address, amount, status: 'pending'
             }]);
 
-            if (error) alert("❌ خطأ: " + error.message);
+            if (error) showToast("❌ خطأ: " + error.message, 'error');
             else {
                 await supabaseClient.from("users").update({ balance: parseFloat(data.balance) - amount }).eq("email", user.email);
-                alert("✅ تم إرسال طلب السحب بنجاح للمراجعة.");
+                showToast("✅ تم إرسال طلب السحب بنجاح للمراجعة التنفيذية.");
                 e.target.reset();
                 updateAuthUI();
             }
