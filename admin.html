@@ -15,16 +15,13 @@
 </head>
 <body>
 
-    <!-- شاشة التحميل الأمنية -->
     <div id="securityLoader" class="d-flex flex-column justify-content-center align-items-center vh-100">
         <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;"></div>
         <h5 class="fw-bold text-light">🔒 جاري التحقق من الهوية السحابية لرئيس المنصة...</h5>
         <small class="text-muted">Zero-Trust Server Guard</small>
     </div>
 
-    <!-- غرفة القيادة والسيطرة المخصصة لرئيس المنصة -->
     <div id="adminConsole" style="display: none;" class="container my-5">
-        
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
             <div>
                 <span class="ceo-badge mb-2 d-inline-block">👑 رئيس المنصة (CEO Command Center)</span>
@@ -36,7 +33,6 @@
             </div>
         </div>
 
-        <!-- العدادات التنفيذية الأربعة -->
         <div class="row g-4 mb-4">
             <div class="col-md-3">
                 <div class="ceo-card p-4 text-center">
@@ -64,7 +60,6 @@
             </div>
         </div>
 
-        <!-- جدول طلبات السحب المباشر -->
         <div class="ceo-card p-4 mb-4">
             <h5 class="fw-bold text-warning mb-3">💳 طلبات السحب المعلقة (موافقة أو رفض بضغطة زر):</h5>
             <div class="table-responsive">
@@ -86,7 +81,6 @@
             </div>
         </div>
 
-        <!-- جدول إدارة المستخدمين والأرصدة -->
         <div class="ceo-card p-4">
             <h5 class="fw-bold text-info mb-3">👥 جميع المستخدمين والتدفق المالي لكل حساب:</h5>
             <div class="table-responsive">
@@ -105,7 +99,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -116,7 +109,6 @@
         const OWNER_EMAIL = "anassadek5535@gmail.com";
 
         document.addEventListener("DOMContentLoaded", async () => {
-            // التحقق السحابي الصارم من هوية رئيس الموقع
             const { data: { user } } = await supabaseClient.auth.getUser();
             
             if (!user || user.email.toLowerCase() !== OWNER_EMAIL.toLowerCase()) {
@@ -125,7 +117,6 @@
                 return;
             }
 
-            // فتح غرفة القيادة بعد إتمام التحقق
             document.getElementById("securityLoader").style.display = "none";
             document.getElementById("adminConsole").style.display = "block";
 
@@ -133,8 +124,7 @@
         });
 
         async function loadDashboardData() {
-            // 1. جلب بيانات المستخدمين
-            const { data: users, error: usersErr } = await supabaseClient.from("users").select("*");
+            const { data: users } = await supabaseClient.from("users").select("*");
             if (users) {
                 document.getElementById("totalUsersVal").innerText = users.length;
                 let totalBal = users.reduce((acc, u) => acc + parseFloat(u.balance || 0), 0);
@@ -156,8 +146,7 @@
                 document.getElementById("usersTableBody").innerHTML = usersHTML || "<tr><td colspan='4' class='text-center'>لا يوجد مستخدمون حتى الآن.</td></tr>";
             }
 
-            // 2. جلب طلبات السحب
-            const { data: withdrawals, error: withErr } = await supabaseClient.from("withdrawals").select("*").order('created_at', { ascending: false });
+            const { data: withdrawals } = await supabaseClient.from("withdrawals").select("*").order('created_at', { ascending: false });
             if (withdrawals) {
                 let pendingCount = withdrawals.filter(w => w.status === 'pending').length;
                 document.getElementById("pendingWithdrawsVal").innerText = pendingCount;
@@ -184,7 +173,7 @@
                         </tr>
                     `;
                 });
-                document.getElementById("withdrawalsTableBody").innerHTML = withHTML || "<tr><td colspan='6' class='text-center'>لا توجد طلبات سحب حلياً.</td></tr>";
+                document.getElementById("withdrawalsTableBody").innerHTML = withHTML || "<tr><td colspan='6' class='text-center'>لا توجد طلبات سحب حالياً.</td></tr>";
             }
         }
 
@@ -210,4 +199,3 @@
     </script>
 </body>
 </html>
-
