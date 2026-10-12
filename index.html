@@ -8,71 +8,44 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --main-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0e14; color: #e0e6ed; transition: 0.3s; }
-        .hero-section { background: var(--main-gradient); color: white; padding: 55px 0; border-bottom: 2px solid #0d6efd; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0e14; color: #e0e6ed; }
+        .hero-section { background: var(--main-gradient); color: white; padding: 50px 0; border-bottom: 2px solid #0d6efd; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; }
         .feature-card { transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; background: #151c24; }
         .feature-card:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(13, 110, 253, 0.2); border-color: #0d6efd; }
-        .ticker-wrap { background: #000000; color: #ffd700; padding: 10px 0; font-size: 0.88rem; font-weight: bold; letter-spacing: 0.5px; border-bottom: 1px solid #333; }
+        .ticker-wrap { background: #000; color: #ffd700; padding: 10px 0; font-size: 0.88rem; font-weight: bold; border-bottom: 1px solid #333; }
         .streak-box { border: 2px dashed #0d6efd; border-radius: 12px; padding: 10px; text-align: center; background: rgba(13, 110, 253, 0.05); }
         .loot-box { cursor: pointer; border: 2px #ffd700 solid; border-radius: 18px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,140,0,0.15)); transition: 0.3s; }
         .loot-box:hover { transform: scale(1.03); box-shadow: 0 0 25px rgba(255,215,0,0.4); }
-        
-        /* شارة رئيس الموقع الفاخرة */
-        .ceo-badge {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
-            color: #000;
-            font-weight: 800;
-            border-radius: 30px;
-            padding: 6px 16px;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-            letter-spacing: 0.5px;
-        }
-        .admin-launch-btn {
-            background: linear-gradient(45deg, #dc3545, #b02a37);
-            border: 1px solid #ff4d5d;
-            box-shadow: 0 0 15px rgba(220, 53, 69, 0.4);
-        }
     </style>
 </head>
 <body>
 
-    <!-- شريط الإشهار والسيطرة المالي -->
     <div class="ticker-wrap text-center">
-        <span>👑 المنصة العالمية المعتمدة | 🛡️ حماية سيرفر سحابية متقدمة | 💼 رئيس مجلس الإدارة والمالك: أنس صادق</span>
+        <span>🔥 15 شبكة عروض عالمية | 💰 نظام أرباح مؤسسي فوري | 🛡️ حماية سيرفر سحابية متقدمة</span>
     </div>
 
-    <!-- القائمة العلوية -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
         <div class="container">
             <a class="navbar-brand fw-bold text-primary fs-4" href="#">Earn<span class="text-white">Universe Pro</span></a>
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-outline-warning btn-sm me-1" id="themeToggleBtn" onclick="toggleTheme()">☀️ المظهر</button>
-                
-                <!-- زر غرفة العمليات الخاص بالمالك فقط -->
-                <a href="admin.html" class="btn btn-danger btn-sm fw-bold me-2 admin-launch-btn" id="ownerConsoleBtn" style="display:none;">👑 مركز إدارة رئيس الموقع</a>
-
                 <span class="text-white small" id="userBalanceContainer" style="display:none;">
                     💰 الرصيد: <strong class="text-success fs-6" id="balanceVal">$0.00</strong>
                 </span>
-                <span id="userRoleBadge" class="ms-1"></span>
-
                 <button class="btn btn-outline-light btn-sm fw-bold" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول / حساب جديد</button>
                 <button class="btn btn-outline-danger btn-sm fw-bold" id="logoutBtn" style="display:none;" onclick="logoutUser()">خروج</button>
             </div>
         </div>
     </nav>
 
-    <!-- الهيدر التنفيذي -->
     <div class="hero-section text-center shadow">
         <div class="container">
             <h1 class="fw-bold mb-2 display-5">منصة الأرباح والخدمات العالمية الشاملة</h1>
-            <p class="lead mb-0 text-light opacity-75">بنية سحابية مؤسسية لإدارة العروض والتدفقات المالية مع كامل الشفافية والرصد الآلي.</p>
+            <p class="lead mb-0 text-light opacity-75">بنية سحابية مؤسسية لإدارة العروض والتدفقات المالية.</p>
         </div>
     </div>
 
     <div class="container my-5">
-        
-        <!-- قسم الجوائز والمكافآت -->
         <div class="row g-3 mb-4">
             <div class="col-md-8">
                 <div class="card p-3 border-0 shadow-sm h-100 feature-card">
@@ -92,13 +65,12 @@
             <div class="col-md-4">
                 <div class="card loot-box p-3 text-center h-100 shadow d-flex flex-column justify-content-center align-items-center" onclick="openLootBox()">
                     <div class="fs-1">🎁</div>
-                    <h6 class="fw-bold text-warning mb-1">صندوق مفاجآت الرئيس</h6>
+                    <h6 class="fw-bold text-warning mb-1">صندوق الجوائز اليومي</h6>
                     <small class="text-light opacity-75">اضغط لاستلام المكافأة السريعة مباشرة</small>
                 </div>
             </div>
         </div>
 
-        <!-- أزرار الخدمات -->
         <div class="row g-3 mb-4">
             <div class="col-md-3">
                 <div class="card feature-card p-3 text-center h-100 shadow-sm">
@@ -135,7 +107,6 @@
             </div>
         </div>
 
-        <!-- التبويبات -->
         <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="mainTabs">
             <li class="nav-item"><button class="nav-link active fw-bold px-4 py-2 shadow" data-bs-toggle="tab" data-bs-target="#networks-tab">🌐 شبكات العروض العالمية</button></li>
             <li class="nav-item"><button class="nav-link fw-bold px-4 py-2 shadow" data-bs-toggle="tab" data-bs-target="#giftcards-tab">🎁 بطاقات الهدايا</button></li>
@@ -143,7 +114,6 @@
         </ul>
 
         <div class="tab-content" id="mainTabsContent">
-            <!-- العروض -->
             <div class="tab-pane fade show active" id="networks-tab">
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow"><div class="fs-1 mb-2">📊</div><h5 class="fw-bold">1. CPX Research</h5><p class="text-muted small">استطلاعات رأي عالمية مدمجة.</p><button class="btn btn-primary fw-bold mt-auto py-2" onclick="openCPXResearch()">🚀 فتح الاستطلاعات</button></div></div>
@@ -152,7 +122,6 @@
                 </div>
             </div>
 
-            <!-- بطاقات الهدايا -->
             <div class="tab-pane fade" id="giftcards-tab">
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow"><div class="fs-1 mb-2">💳</div><h6 class="fw-bold">Google Play $5.00</h6><button class="btn btn-outline-success fw-bold mt-auto" onclick="redeemGiftCard('Google Play $5', 5.0)">استبدال النقاط</button></div></div>
@@ -160,7 +129,6 @@
                 </div>
             </div>
 
-            <!-- السحب الحقيقي -->
             <div class="tab-pane fade" id="withdraw-tab">
                 <div class="card p-4 border-0 shadow mx-auto feature-card" style="max-width: 600px;">
                     <h4 class="fw-bold mb-3 text-center text-primary">💳 سحب الأرباح الفوري</h4>
@@ -181,7 +149,7 @@
                             <label class="form-label fw-bold">المبلغ المطلوب ($):</label>
                             <input type="number" step="0.1" min="1" class="form-control" id="withdrawAmount" placeholder="0.00" required>
                         </div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow">إرسال طلب السحب للشركة</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow">إرسال طلب السحب</button>
                     </form>
                 </div>
             </div>
@@ -201,20 +169,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="tab-content">
-                        <!-- تسجيل الدخول -->
                         <div class="tab-pane fade show active" id="login-panel">
                             <form id="loginForm">
-                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="loginEmail" class="form-control" required placeholder="Anassadek5535@gmail.com"></div>
+                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="loginEmail" class="form-control" required placeholder="name@example.com"></div>
                                 <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="loginPass" class="form-control" required placeholder="******"></div>
-                                <div class="mb-3 text-end"><a href="#" class="text-warning small text-decoration-none" onclick="forgotPassword()">نسيت كلمة السر؟</a></div>
                                 <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow">دخول المنصة</button>
                             </form>
                         </div>
-                        <!-- حساب جديد -->
                         <div class="tab-pane fade" id="signup-panel">
                             <form id="signupForm">
-                                <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="signupUser" class="form-control" required placeholder="Anas"></div>
-                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="signupEmail" class="form-control" required placeholder="Anassadek5535@gmail.com"></div>
+                                <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="signupUser" class="form-control" required placeholder="User"></div>
+                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="signupEmail" class="form-control" required placeholder="name@example.com"></div>
                                 <div class="mb-3"><label class="form-label">كلمة السر (6 أحرف فأكثر)</label><input type="password" id="signupPass" class="form-control" required minlength="6" placeholder="******"></div>
                                 <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow">إنشاء حساب فوري</button>
                             </form>
@@ -230,8 +195,6 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwdWpiZ3lncm51cWdkbnJleGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDA1MDUsImV4cCI6MjEwNzIxNjUwNX0.dmNknj6Sg3MTFGjAcyCHiPTyfTWVeyEPBgEe5oVZGGU";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const OWNER_EMAIL = "anassadek5535@gmail.com";
-
         document.addEventListener("DOMContentLoaded", () => updateAuthUI());
 
         function toggleTheme() {
@@ -246,24 +209,13 @@
                 document.getElementById("authNavBtn").style.display = "none";
                 document.getElementById("logoutBtn").style.display = "inline";
                 document.getElementById("userBalanceContainer").style.display = "inline";
-                
-                // التمييز المؤسسي لرئيس المنصة
-                if (user.email.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
-                    document.getElementById("ownerConsoleBtn").style.display = "inline-block";
-                    document.getElementById("userRoleBadge").innerHTML = '<span class="ceo-badge small">👑 رئيس المنصة (CEO)</span>';
-                } else {
-                    document.getElementById("ownerConsoleBtn").style.display = "none";
-                    document.getElementById("userRoleBadge").innerHTML = '';
-                }
 
                 const { data } = await supabaseClient.from("users").select("balance").eq("email", user.email).maybeSingle();
                 if (data) document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
             } else {
                 document.getElementById("authNavBtn").style.display = "inline";
                 document.getElementById("logoutBtn").style.display = "none";
-                document.getElementById("ownerConsoleBtn").style.display = "none";
                 document.getElementById("userBalanceContainer").style.display = "none";
-                document.getElementById("userRoleBadge").innerHTML = '';
             }
         }
 
@@ -272,7 +224,6 @@
             location.reload();
         }
 
-        // تسجيل الدخول
         document.getElementById("loginForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const { error } = await supabaseClient.auth.signInWithPassword({
@@ -280,10 +231,9 @@
                 password: document.getElementById("loginPass").value
             });
             if (error) alert("❌ خطأ: " + error.message);
-            else { alert("✅ أهلاً بك سيادة الرئيس! تم تسجيل الدخول بنجاح."); location.reload(); }
+            else { alert("✅ تم تسجيل الدخول بنجاح."); location.reload(); }
         });
 
-        // إنشاء حساب
         document.getElementById("signupForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const u = document.getElementById("signupUser").value.trim();
@@ -291,36 +241,18 @@
             const p = document.getElementById("signupPass").value;
 
             const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
-                email: em,
-                password: p,
-                options: { data: { username: u } }
+                email: em, password: p, options: { data: { username: u } }
             });
 
-            if (signUpError) {
-                alert("❌ خطأ أثناء الإنشاء: " + signUpError.message);
-                return;
-            }
+            if (signUpError) { alert("❌ خطأ: " + signUpError.message); return; }
 
             const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
-                email: em,
-                password: p
+                email: em, password: p
             });
 
-            if (signInError) {
-                alert("🎉 تم إنشاء الحساب بنجاح!");
-            } else {
-                alert("🎉 تم إنشاء الحساب وتسجيل الدخول تلقائياً!");
-                location.reload();
-            }
+            if (signInError) { alert("🎉 تم إنشاء الحساب بنجاح!"); }
+            else { alert("🎉 تم إنشاء الحساب وتسجيل الدخول تلقائياً!"); location.reload(); }
         });
-
-        async function forgotPassword() {
-            const email = prompt("أدخل بريدك الإلكتروني لإرسال رابط إعادة تعيين كلمة السر:");
-            if (!email) return;
-            const { error } = await supabaseClient.auth.resetPasswordForEmail(email.trim());
-            if (error) alert("❌ خطأ: " + error.message);
-            else alert("📩 تم إرسال رابط التعيين إلى بريدك الإلكتروني بنجاح.");
-        }
 
         async function addBalanceToUser(amount, message) {
             const { data: { user } } = await supabaseClient.auth.getUser();
@@ -334,7 +266,7 @@
             else { alert(`🎉 ${message} (+$${amount})`); updateAuthUI(); }
         }
 
-        function openLootBox() { addBalanceToUser(0.10, "صندوق المفاجآت"); }
+        function openLootBox() { addBalanceToUser(0.10, "صندوق المكافآت"); }
         function claimDailyBonus() { addBalanceToUser(0.05, "المكافأة اليومية"); }
         function spinLuckyWheel() { addBalanceToUser(0.10, "عجلة الحظ"); }
         function applyPromoCode() {
