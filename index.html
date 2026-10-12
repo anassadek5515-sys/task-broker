@@ -191,8 +191,8 @@
                         <!-- تسجيل الدخول -->
                         <div class="tab-pane fade show active" id="login-panel">
                             <form id="loginForm">
-                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="loginEmail" class="form-control" required></div>
-                                <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="loginPass" class="form-control" required></div>
+                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="loginEmail" class="form-control" required placeholder="Anassadek5535@gmail.com"></div>
+                                <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="loginPass" class="form-control" required placeholder="******"></div>
                                 <div class="mb-3 text-end"><a href="#" class="text-warning small text-decoration-none" onclick="forgotPassword()">نسيت كلمة السر؟</a></div>
                                 <button type="submit" class="btn btn-primary w-100 fw-bold py-2">دخول النظام</button>
                             </form>
@@ -200,9 +200,9 @@
                         <!-- حساب جديد -->
                         <div class="tab-pane fade" id="signup-panel">
                             <form id="signupForm">
-                                <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="signupUser" class="form-control" required></div>
-                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="signupEmail" class="form-control" required></div>
-                                <div class="mb-3"><label class="form-label">كلمة السر (6 أحرف فأكثر)</label><input type="password" id="signupPass" class="form-control" required minlength="6"></div>
+                                <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="signupUser" class="form-control" required placeholder="Anas"></div>
+                                <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="signupEmail" class="form-control" required placeholder="Anassadek5535@gmail.com"></div>
+                                <div class="mb-3"><label class="form-label">كلمة السر (6 أحرف فأكثر)</label><input type="password" id="signupPass" class="form-control" required minlength="6" placeholder="******"></div>
                                 <button type="submit" class="btn btn-success w-100 fw-bold py-2">إنشاء حساب فوري</button>
                             </form>
                         </div>
@@ -253,23 +253,23 @@
             else { alert("✅ تم تسجيل الدخول بنجاح!"); location.reload(); }
         });
 
-        // إنشاء حساب مؤسسي مؤمت
+        // إنشاء حساب مؤمت مع السيرفر
         document.getElementById("signupForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const u = document.getElementById("signupUser").value.trim();
             const em = document.getElementById("signupEmail").value.trim();
             const p = document.getElementById("signupPass").value;
 
-            const { error } = await supabaseClient.auth.signUp({
+            const { data, error } = await supabaseClient.auth.signUp({
                 email: em,
                 password: p,
                 options: { data: { username: u } }
             });
 
             if (error) {
-                alert("❌ خطأ بالإنشاء: " + error.message);
+                alert("❌ خطأ: " + error.message);
             } else {
-                alert("🎉 تم إنشاء الحساب وسجله النظام بنجاح تام!");
+                alert("🎉 تم إنشاء الحساب بنجاح وتجهيزه داخل السيرفر!");
                 location.reload();
             }
         });
@@ -327,7 +327,7 @@
             if (!data || parseFloat(data.balance || 0) < amount) return alert("❌ رصيدك غير كافٍ!");
 
             const { error } = await supabaseClient.from("withdrawals").insert([{
-                user_id: user.id, username: data.username || 'user', method, address, amount, status: 'pending'
+                username: data.username || 'user', method, address, amount, status: 'pending'
             }]);
 
             if (error) alert("❌ خطأ: " + error.message);
