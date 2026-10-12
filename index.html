@@ -16,13 +16,14 @@
         .streak-box { border: 2px dashed #0d6efd; border-radius: 12px; padding: 10px; text-align: center; }
         .loot-box { cursor: pointer; border: 2px gold solid; border-radius: 18px; background: rgba(255, 215, 0, 0.1); transition: 0.3s; }
         .loot-box:hover { background: rgba(255, 215, 0, 0.25); transform: scale(1.03); }
+        .owner-badge { background: linear-gradient(45deg, #ff416c, #ff4b2b); color: #fff; font-weight: bold; border-radius: 20px; padding: 5px 15px; }
     </style>
 </head>
 <body>
 
     <!-- شريط الإشعارات الحية -->
     <div class="ticker-wrap text-center">
-        <span>🔥 15 شبكة عروض عالمية | 💰 نظام أرباح مؤسسي فوري | 🛡️ حماية سيرفر سحابية متقدمة | 👑 مالك المنصة: أنس صادق</span>
+        <span>🔥 15 شبكة عروض عالمية | 💰 نظام أرباح مؤسسي فوري | 🛡️ حماية سيرفر سحابية متقدمة | 👑 رئيس المنصة: أنس صادق</span>
     </div>
 
     <!-- القائمة العلوية -->
@@ -31,10 +32,15 @@
             <a class="navbar-brand fw-bold text-primary" href="#">Earn<span class="text-white">Universe Pro</span></a>
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-outline-warning btn-sm me-1" id="themeToggleBtn" onclick="toggleTheme()">☀️ المظهر</button>
-                <button class="btn btn-danger btn-sm fw-bold me-2" onclick="openAdminPanel()">👑 لوحة المالك</button>
+                
+                <!-- زر خاص برئيس الموقع يتفعل تلقائياً عند دخولك -->
+                <a href="admin.html" class="btn btn-danger btn-sm fw-bold me-2" id="ownerConsoleBtn" style="display:none;">👑 لوحة تحكم رئيس الموقع</a>
+
                 <span class="text-white small" id="userBalanceContainer" style="display:none;">
                     💰 الرصيد: <strong class="text-success" id="balanceVal">$0.00</strong>
                 </span>
+                <span id="userRoleBadge" class="ms-1"></span>
+
                 <button class="btn btn-outline-light btn-sm" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول / حساب جديد</button>
                 <button class="btn btn-outline-danger btn-sm" id="logoutBtn" style="display:none;" onclick="logoutUser()">خروج</button>
             </div>
@@ -45,7 +51,7 @@
     <div class="hero-section text-center shadow">
         <div class="container">
             <h1 class="fw-bold mb-2 display-5">منصة الأرباح العالمية الشاملة</h1>
-            <p class="lead mb-3">بنية تحكم سحابية مؤمنة بالكامل ومزودة بأنظمة أرباح واستطلاعات حقيقية.</p>
+            <p class="lead mb-3">نظام مؤسسي متكامل ومربوط بالسيرفر لمتابعة كافة الأنشطة والتدفقات المالية.</p>
         </div>
     </div>
 
@@ -167,25 +173,7 @@
         </div>
     </div>
 
-    <!-- Modal لوحة المالك -->
-    <div class="modal fade" id="adminModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title fw-bold">👑 لوحة التحكم المؤسسية للمالك</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p class="text-warning small">⚠️ هذه البوابة مؤمنة حصرياً لحساب الإدارة المركزي.</p>
-                    <label class="form-label fw-bold">كلمة سر الإدارة السرية:</label>
-                    <input type="password" id="adminPassInput" class="form-control mb-3" placeholder="كلمة المرور">
-                    <button class="btn btn-danger w-100 fw-bold" onclick="verifyAdminSecure()">تسجيل دخول الإدارة 🚀</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal المصادقة العضوية -->
+    <!-- Modal المصادقة -->
     <div class="modal fade" id="authModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -227,6 +215,8 @@
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZwdWpiZ3lncm51cWdkbnJleGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE2NDA1MDUsImV4cCI6MjEwNzIxNjUwNX0.dmNknj6Sg3MTFGjAcyCHiPTyfTWVeyEPBgEe5oVZGGU";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        const OWNER_EMAIL = "anassadek5535@gmail.com";
+
         document.addEventListener("DOMContentLoaded", () => updateAuthUI());
 
         function toggleTheme() {
@@ -242,12 +232,23 @@
                 document.getElementById("logoutBtn").style.display = "inline";
                 document.getElementById("userBalanceContainer").style.display = "inline";
                 
+                // التمييز التلقائي لمالك ورئيس الموقع
+                if (user.email.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
+                    document.getElementById("ownerConsoleBtn").style.display = "inline-block";
+                    document.getElementById("userRoleBadge").innerHTML = '<span class="owner-badge small">👑 رئيس الموقع</span>';
+                } else {
+                    document.getElementById("ownerConsoleBtn").style.display = "none";
+                    document.getElementById("userRoleBadge").innerHTML = '';
+                }
+
                 const { data } = await supabaseClient.from("users").select("balance").eq("email", user.email).maybeSingle();
                 if (data) document.getElementById("balanceVal").innerText = "$" + parseFloat(data.balance || 0).toFixed(2);
             } else {
                 document.getElementById("authNavBtn").style.display = "inline";
                 document.getElementById("logoutBtn").style.display = "none";
+                document.getElementById("ownerConsoleBtn").style.display = "none";
                 document.getElementById("userBalanceContainer").style.display = "none";
+                document.getElementById("userRoleBadge").innerHTML = '';
             }
         }
 
@@ -256,7 +257,7 @@
             location.reload();
         }
 
-        // تسجيل الدخول العادي
+        // تسجيل الدخول
         document.getElementById("loginForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const { error } = await supabaseClient.auth.signInWithPassword({
@@ -264,17 +265,16 @@
                 password: document.getElementById("loginPass").value
             });
             if (error) alert("❌ خطأ: " + error.message);
-            else { alert("✅ تم تسجيل الدخول بنجاح!"); location.reload(); }
+            else { alert("✅ أهلاً بك! تم تسجيل الدخول بنجاح."); location.reload(); }
         });
 
-        // 📝 إنشاء حساب جديد مع تسجيل دخول فوري ومباشر تلقائياً
+        // إنشاء حساب
         document.getElementById("signupForm").addEventListener("submit", async (e) => {
             e.preventDefault();
             const u = document.getElementById("signupUser").value.trim();
             const em = document.getElementById("signupEmail").value.trim();
             const p = document.getElementById("signupPass").value;
 
-            // 1. إنشاء الحساب
             const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({
                 email: em,
                 password: p,
@@ -286,16 +286,15 @@
                 return;
             }
 
-            // 2. تسجيل دخول تلقائي ومباشر فور الانتهاء لفتح الجلسة
             const { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
                 email: em,
                 password: p
             });
 
             if (signInError) {
-                alert("🎉 تم إنشاء الحساب بنجاح! انتقل لتبويب 'تسجيل الدخول' للدخول مباشرة.");
+                alert("🎉 تم إنشاء الحساب بنجاح!");
             } else {
-                alert("🎉 تم إنشاء الحساب وتسجيل دخولك بنجاح!");
+                alert("🎉 تم إنشاء الحساب وتسجيل دخولك تلقائياً!");
                 location.reload();
             }
         });
@@ -364,17 +363,6 @@
                 updateAuthUI();
             }
         });
-
-        function openAdminPanel() { new bootstrap.Modal(document.getElementById('adminModal')).show(); }
-
-        async function verifyAdminSecure() {
-            const pass = document.getElementById("adminPassInput").value;
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
-                email: "Anassadek5535@gmail.com", password: pass
-            });
-            if (error) alert("❌ كلمة سر الإدارة غير صحيحة.");
-            else window.location.href = "admin.html";
-        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
