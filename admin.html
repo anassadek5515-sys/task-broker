@@ -134,71 +134,84 @@
         const OWNER_EMAIL = "anassadek5535@gmail.com";
 
         document.addEventListener("DOMContentLoaded", async () => {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            
-            if (!user || user.email.toLowerCase() !== OWNER_EMAIL.toLowerCase()) {
-                alert("⛔ تنبيه أمني: غير مصرح لك بالوصول لهذه الصفحة التابعة لإدارة الموقع!");
+            try {
+                // جلب جلسة المستخدم مع مهلة أمان
+                const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
+                
+                if (sessionError || !session || !session.user || session.user.email.toLowerCase() !== OWNER_EMAIL.toLowerCase()) {
+                    alert("⛔ تنبيه أمني: يرجى تسجيل الدخول أولاً في الموقع ببريد رئيس المنصة (anassadek5535@gmail.com) ثم إعادة فتح الصفحة.");
+                    window.location.href = "index.html";
+                    return;
+                }
+
+                const user = session.user;
+
+                document.getElementById("securityLoader").style.display = "none";
+                document.getElementById("adminConsole").style.display = "block";
+
+                loadDashboardData();
+            } catch (err) {
+                console.error("Auth Error:", err);
+                alert("❌ حدث خطأ في الاتصال بالسيرفر. يرجى تسجيل الدخول من جديد.");
                 window.location.href = "index.html";
-                return;
             }
-
-            document.getElementById("securityLoader").style.display = "none";
-            document.getElementById("adminConsole").style.display = "block";
-
-            loadDashboardData();
         });
 
         async function loadDashboardData() {
-            const { data: users } = await supabaseClient.from("users").select("*");
-            if (users) {
-                document.getElementById("totalUsersVal").innerText = users.length;
-                let totalBal = users.reduce((acc, u) => acc + parseFloat(u.balance || 0), 0);
-                document.getElementById("totalUserBalanceVal").innerText = "$" + totalBal.toFixed(2);
+            try {
+                const { data: users } = await supabaseClient.from("users").select("*");
+                if (users) {
+                    document.getElementById("totalUsersVal").innerText = users.length;
+                    let totalBal = users.reduce((acc, u) => acc + parseFloat(u.balance || 0), 0);
+                    document.getElementById("totalUserBalanceVal").innerText = "$" + totalBal.toFixed(2);
 
-                let usersHTML = "";
-                users.forEach(u => {
-                    usersHTML += `
-                        <tr>
-                            <td>${u.email}</td>
-                            <td>${u.username || 'بدون اسم'}</td>
-                            <td class="text-success fw-bold">$${parseFloat(u.balance || 0).toFixed(2)}</td>
-                            <td>
-                                <button class="btn btn-outline-warning btn-sm" onclick="editUserBalance('${u.email}', ${u.balance || 0})">✏️ تعديل الرصيد</button>
-                            </td>
-                        </tr>
-                    `;
-                });
-                document.getElementById("usersTableBody").innerHTML = usersHTML || "<tr><td colspan='4' class='text-center'>لا يوجد مستخدمون حتى الآن.</td></tr>";
-            }
+                    let usersHTML = "";
+                    users.forEach(u => {
+                        usersHTML += `
+                            <tr>
+                                <td>${u.email}</td>
+                                td>${u.username || 'بدون اسم'}</td>
+                                <td class="text-success fw-bold">$${parseFloat(u.balance || 0).toFixed(2)}</td>
+                                <td>
+                                    <button class="btn btn-outline-warning btn-sm" onclick="editUserBalance('${u.email}', ${u.balance || 0})">✏️ تعديل الرصيد</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    document.getElementById("usersTableBody").innerHTML = usersHTML || "<tr><td colspan='4' class='text-center'>لا يوجد مستخدمون حتى الآن.</td></tr>";
+                }
 
-            const { data: withdrawals } = await supabaseClient.from("withdrawals").select("*").order('created_at', { ascending: false });
-            if (withdrawals) {
-                let pendingCount = withdrawals.filter(w => w.status === 'pending').length;
-                document.getElementById("pendingWithdrawsVal").innerText = pendingCount;
+                const { data: withdrawals } = await supabaseClient.from("withdrawals").select("*").order('created_at', { ascending: false });
+                if (withdrawals) {
+                    let pendingCount = withdrawals.filter(w => w.status === 'pending').length;
+                    document.getElementById("pendingWithdrawsVal").innerText = pendingCount;
 
-                let withHTML = "";
-                withdrawals.forEach(w => {
-                    let statusBadge = w.status === 'approved' ? '<span class="badge bg-success">تم القبول</span>' :
-                                     w.status === 'rejected' ? '<span class="badge bg-danger">مرفوض</span>' :
-                                     '<span class="badge bg-warning text-dark">معلق</span>';
+                    let withHTML = "";
+                    withdrawals.forEach(w => {
+                        let statusBadge = w.status === 'approved' ? '<span class="badge bg-success">تم القبول</span>' :
+                                         w.status === 'rejected' ? '<span class="badge bg-danger">مرفوض</span>' :
+                                         '<span class="badge bg-warning text-dark">معلق</span>';
 
-                    withHTML += `
-                        <tr>
-                            <td>${w.username}</td>
-                            <td>${w.method}</td>
-                            <td><code>${w.address}</code></td>
-                            <td class="text-success fw-bold">$${parseFloat(w.amount).toFixed(2)}</td>
-                            <td>${statusBadge}</td>
-                            <td>
-                                ${w.status === 'pending' ? `
-                                    <button class="btn btn-success btn-sm me-1" onclick="updateWithdrawStatus(${w.id}, 'approved')">✅ قبول وتمرير</button>
-                                    <button class="btn btn-danger btn-sm" onclick="updateWithdrawStatus(${w.id}, 'rejected')">❌ رفض</button>
-                                ` : '<small class="text-muted">مكتمل</small>'}
-                            </td>
-                        </tr>
-                    `;
-                });
-                document.getElementById("withdrawalsTableBody").innerHTML = withHTML || "<tr><td colspan='6' class='text-center'>لا توجد طلبات سحب حالياً.</td></tr>";
+                        withHTML += `
+                            <tr>
+                                <td>${w.username}</td>
+                                <td>${w.method}</td>
+                                <td><code>${w.address}</code></td>
+                                <td class="text-success fw-bold">$${parseFloat(w.amount).toFixed(2)}</td>
+                                <td>${statusBadge}</td>
+                                <td>
+                                    ${w.status === 'pending' ? `
+                                        <button class="btn btn-success btn-sm me-1" onclick="updateWithdrawStatus(${w.id}, 'approved')">✅ قبول وتمرير</button>
+                                        <button class="btn btn-danger btn-sm" onclick="updateWithdrawStatus(${w.id}, 'rejected')">❌ رفض</button>
+                                    ` : '<small class="text-muted">مكتمل</small>'}
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    document.getElementById("withdrawalsTableBody").innerHTML = withHTML || "<tr><td colspan='6' class='text-center'>لا توجد طلبات سحب حالياً.</td></tr>";
+                }
+            } catch (e) {
+                console.error("Data Load Error:", e);
             }
         }
 
