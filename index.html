@@ -7,83 +7,98 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --main-gradient: linear-gradient(135deg, #0d6efd, #6610f2); }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s, color 0.3s; }
-        .hero-section { background: var(--main-gradient); color: white; padding: 50px 0; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; }
-        .feature-card { transition: all 0.3s ease; border: none; border-radius: 18px; }
-        .feature-card:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(0,0,0,0.25); }
-        .ticker-wrap { background: #000; color: #fff; padding: 9px 0; font-size: 0.85rem; overflow: hidden; white-space: nowrap; }
-        .streak-box { border: 2px dashed #0d6efd; border-radius: 12px; padding: 10px; text-align: center; }
-        .loot-box { cursor: pointer; border: 2px gold solid; border-radius: 18px; background: rgba(255, 215, 0, 0.1); transition: 0.3s; }
-        .loot-box:hover { background: rgba(255, 215, 0, 0.25); transform: scale(1.03); }
-        .owner-badge { background: linear-gradient(45deg, #ff416c, #ff4b2b); color: #fff; font-weight: bold; border-radius: 20px; padding: 5px 15px; }
+        :root { --main-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0e14; color: #e0e6ed; transition: 0.3s; }
+        .hero-section { background: var(--main-gradient); color: white; padding: 55px 0; border-bottom: 2px solid #0d6efd; border-bottom-left-radius: 35px; border-bottom-right-radius: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .feature-card { transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; background: #151c24; }
+        .feature-card:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(13, 110, 253, 0.2); border-color: #0d6efd; }
+        .ticker-wrap { background: #000000; color: #ffd700; padding: 10px 0; font-size: 0.88rem; font-weight: bold; letter-spacing: 0.5px; border-bottom: 1px solid #333; }
+        .streak-box { border: 2px dashed #0d6efd; border-radius: 12px; padding: 10px; text-align: center; background: rgba(13, 110, 253, 0.05); }
+        .loot-box { cursor: pointer; border: 2px #ffd700 solid; border-radius: 18px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,140,0,0.15)); transition: 0.3s; }
+        .loot-box:hover { transform: scale(1.03); box-shadow: 0 0 25px rgba(255,215,0,0.4); }
+        
+        /* شارة رئيس الموقع الفاخرة */
+        .ceo-badge {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            font-weight: 800;
+            border-radius: 30px;
+            padding: 6px 16px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            letter-spacing: 0.5px;
+        }
+        .admin-launch-btn {
+            background: linear-gradient(45deg, #dc3545, #b02a37);
+            border: 1px solid #ff4d5d;
+            box-shadow: 0 0 15px rgba(220, 53, 69, 0.4);
+        }
     </style>
 </head>
 <body>
 
-    <!-- شريط الإشعارات الحية -->
+    <!-- شريط الإشهار والسيطرة المالي -->
     <div class="ticker-wrap text-center">
-        <span>🔥 15 شبكة عروض عالمية | 💰 نظام أرباح مؤسسي فوري | 🛡️ حماية سيرفر سحابية متقدمة | 👑 رئيس المنصة: أنس صادق</span>
+        <span>👑 المنصة العالمية المعتمدة | 🛡️ حماية سيرفر سحابية متقدمة | 💼 رئيس مجلس الإدارة والمالك: أنس صادق</span>
     </div>
 
     <!-- القائمة العلوية -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="#">Earn<span class="text-white">Universe Pro</span></a>
+            <a class="navbar-brand fw-bold text-primary fs-4" href="#">Earn<span class="text-white">Universe Pro</span></a>
             <div class="d-flex align-items-center gap-2">
                 <button class="btn btn-outline-warning btn-sm me-1" id="themeToggleBtn" onclick="toggleTheme()">☀️ المظهر</button>
                 
-                <!-- زر خاص برئيس الموقع يتفعل تلقائياً عند دخولك -->
-                <a href="admin.html" class="btn btn-danger btn-sm fw-bold me-2" id="ownerConsoleBtn" style="display:none;">👑 لوحة تحكم رئيس الموقع</a>
+                <!-- زر غرفة العمليات الخاص بالمالك فقط -->
+                <a href="admin.html" class="btn btn-danger btn-sm fw-bold me-2 admin-launch-btn" id="ownerConsoleBtn" style="display:none;">👑 مركز إدارة رئيس الموقع</a>
 
                 <span class="text-white small" id="userBalanceContainer" style="display:none;">
-                    💰 الرصيد: <strong class="text-success" id="balanceVal">$0.00</strong>
+                    💰 الرصيد: <strong class="text-success fs-6" id="balanceVal">$0.00</strong>
                 </span>
                 <span id="userRoleBadge" class="ms-1"></span>
 
-                <button class="btn btn-outline-light btn-sm" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول / حساب جديد</button>
-                <button class="btn btn-outline-danger btn-sm" id="logoutBtn" style="display:none;" onclick="logoutUser()">خروج</button>
+                <button class="btn btn-outline-light btn-sm fw-bold" id="authNavBtn" data-bs-toggle="modal" data-bs-target="#authModal">تسجيل الدخول / حساب جديد</button>
+                <button class="btn btn-outline-danger btn-sm fw-bold" id="logoutBtn" style="display:none;" onclick="logoutUser()">خروج</button>
             </div>
         </div>
     </nav>
 
-    <!-- الهيدر الرئيسي -->
+    <!-- الهيدر التنفيذي -->
     <div class="hero-section text-center shadow">
         <div class="container">
-            <h1 class="fw-bold mb-2 display-5">منصة الأرباح العالمية الشاملة</h1>
-            <p class="lead mb-3">نظام مؤسسي متكامل ومربوط بالسيرفر لمتابعة كافة الأنشطة والتدفقات المالية.</p>
+            <h1 class="fw-bold mb-2 display-5">منصة الأرباح والخدمات العالمية الشاملة</h1>
+            <p class="lead mb-0 text-light opacity-75">بنية سحابية مؤسسية لإدارة العروض والتدفقات المالية مع كامل الشفافية والرصد الآلي.</p>
         </div>
     </div>
 
     <div class="container my-5">
         
-        <!-- قسم المكافآت التفاعلية -->
+        <!-- قسم الجوائز والمكافآت -->
         <div class="row g-3 mb-4">
             <div class="col-md-8">
-                <div class="card p-3 border-0 shadow-sm h-100">
-                    <h6 class="fw-bold mb-2">🔥 سجل الدخول اليومي (مكافأة حقيقية لرصيدك):</h6>
+                <div class="card p-3 border-0 shadow-sm h-100 feature-card">
+                    <h6 class="fw-bold mb-2 text-warning">🔥 سجل الدخول اليومي (مكافأة حقيقية):</h6>
                     <div class="row g-2 text-center">
-                        <div class="col"><div class="streak-box bg-body-tertiary"><strong>اليوم 1</strong><br><small class="text-success">+$0.02</small></div></div>
-                        <div class="col"><div class="streak-box bg-body-tertiary"><strong>اليوم 2</strong><br><small class="text-success">+$0.04</small></div></div>
-                        <div class="col"><div class="streak-box bg-body-tertiary"><strong>اليوم 3</strong><br><small class="text-success">+$0.06</small></div></div>
-                        <div class="col"><div class="streak-box bg-body-tertiary"><strong>اليوم 4</strong><br><small class="text-success">+$0.08</small></div></div>
-                        <div class="col"><div class="streak-box bg-body-tertiary"><strong>اليوم 5</strong><br><small class="text-success">+$0.10</small></div></div>
-                        <div class="col"><div class="streak-box bg-body-tertiary"><strong>اليوم 6</strong><br><small class="text-success">+$0.15</small></div></div>
+                        <div class="col"><div class="streak-box"><strong>اليوم 1</strong><br><small class="text-success">+$0.02</small></div></div>
+                        <div class="col"><div class="streak-box"><strong>اليوم 2</strong><br><small class="text-success">+$0.04</small></div></div>
+                        <div class="col"><div class="streak-box"><strong>اليوم 3</strong><br><small class="text-success">+$0.06</small></div></div>
+                        <div class="col"><div class="streak-box"><strong>اليوم 4</strong><br><small class="text-success">+$0.08</small></div></div>
+                        <div class="col"><div class="streak-box"><strong>اليوم 5</strong><br><small class="text-success">+$0.10</small></div></div>
+                        <div class="col"><div class="streak-box"><strong>اليوم 6</strong><br><small class="text-success">+$0.15</small></div></div>
                         <div class="col"><div class="streak-box bg-primary text-white"><strong>اليوم 7 🎉</strong><br><small>+$0.50</small></div></div>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card loot-box p-3 text-center h-100 shadow-sm d-flex flex-column justify-content-center align-items-center" onclick="openLootBox()">
+                <div class="card loot-box p-3 text-center h-100 shadow d-flex flex-column justify-content-center align-items-center" onclick="openLootBox()">
                     <div class="fs-1">🎁</div>
-                    <h6 class="fw-bold text-warning mb-1">صندوق الجوائز الخارقة</h6>
-                    <small class="text-muted">اضغط لفتح صندوق المفاجأة وإضافة الرصيد</small>
+                    <h6 class="fw-bold text-warning mb-1">صندوق مفاجآت الرئيس</h6>
+                    <small class="text-light opacity-75">اضغط لاستلام المكافأة السريعة مباشرة</small>
                 </div>
             </div>
         </div>
 
-        <!-- أزرار المكافآت -->
+        <!-- أزرار الخدمات -->
         <div class="row g-3 mb-4">
             <div class="col-md-3">
                 <div class="card feature-card p-3 text-center h-100 shadow-sm">
@@ -122,33 +137,33 @@
 
         <!-- التبويبات -->
         <ul class="nav nav-pills justify-content-center mb-4 gap-2" id="mainTabs">
-            <li class="nav-item"><button class="nav-link active fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#networks-tab">🌐 شبكات العروض الحقيقية</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#giftcards-tab">🎁 بطاقات الهدايا</button></li>
-            <li class="nav-item"><button class="nav-link fw-bold px-3 shadow-sm" data-bs-toggle="tab" data-bs-target="#withdraw-tab">💳 سحب الأرباح الحقيقي</button></li>
+            <li class="nav-item"><button class="nav-link active fw-bold px-4 py-2 shadow" data-bs-toggle="tab" data-bs-target="#networks-tab">🌐 شبكات العروض العالمية</button></li>
+            <li class="nav-item"><button class="nav-link fw-bold px-4 py-2 shadow" data-bs-toggle="tab" data-bs-target="#giftcards-tab">🎁 بطاقات الهدايا</button></li>
+            <li class="nav-item"><button class="nav-link fw-bold px-4 py-2 shadow" data-bs-toggle="tab" data-bs-target="#withdraw-tab">💳 سحب الأرباح الفوري</button></li>
         </ul>
 
         <div class="tab-content" id="mainTabsContent">
             <!-- العروض -->
             <div class="tab-pane fade show active" id="networks-tab">
                 <div class="row g-4 justify-content-center">
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📊</div><h5 class="fw-bold">1. CPX Research</h5><p class="text-muted small">استطلاعات رأي عالمية.</p><button class="btn btn-primary fw-bold mt-auto py-2" onclick="openCPXResearch()">🚀 فتح الاستطلاعات</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">📝</div><h5 class="fw-bold">2. TimeWall Tasks</h5><p class="text-muted small">مهام مصغرة وزيارات.</p><button class="btn btn-success fw-bold mt-auto py-2" onclick="openTimeWall()">💼 فتح المهام</button></div></div>
-                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🎮</div><h5 class="fw-bold">3. BitLabs Offerwall</h5><p class="text-muted small">ألعاب وتطبيقات واستطلاعات.</p><button class="btn btn-warning fw-bold mt-auto py-2" onclick="openNetwork('BitLabs')">⭐ تصفح العروض</button></div></div>
+                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow"><div class="fs-1 mb-2">📊</div><h5 class="fw-bold">1. CPX Research</h5><p class="text-muted small">استطلاعات رأي عالمية مدمجة.</p><button class="btn btn-primary fw-bold mt-auto py-2" onclick="openCPXResearch()">🚀 فتح الاستطلاعات</button></div></div>
+                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow"><div class="fs-1 mb-2">📝</div><h5 class="fw-bold">2. TimeWall Tasks</h5><p class="text-muted small">مهام مصغرة وزيارات آمنة.</p><button class="btn btn-success fw-bold mt-auto py-2" onclick="openTimeWall()">💼 فتح المهام</button></div></div>
+                    <div class="col-md-4"><div class="card feature-card p-4 text-center h-100 shadow"><div class="fs-1 mb-2">🎮</div><h5 class="fw-bold">3. BitLabs Offerwall</h5><p class="text-muted small">ألعاب وتطبيقات واستطلاعات موثوقة.</p><button class="btn btn-warning fw-bold mt-auto py-2" onclick="openNetwork('BitLabs')">⭐ تصفح العروض</button></div></div>
                 </div>
             </div>
 
             <!-- بطاقات الهدايا -->
             <div class="tab-pane fade" id="giftcards-tab">
                 <div class="row g-4 justify-content-center">
-                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow-sm"><div class="fs-1 mb-2">💳</div><h6 class="fw-bold">Google Play $5.00</h6><button class="btn btn-outline-success fw-bold mt-auto" onclick="redeemGiftCard('Google Play $5', 5.0)">استبدال النقاط</button></div></div>
-                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow-sm"><div class="fs-1 mb-2">🔥</div><h6 class="fw-bold">Free Fire Diamonds</h6><button class="btn btn-outline-danger fw-bold mt-auto" onclick="redeemGiftCard('Free Fire', 2.0)">شحن الآن</button></div></div>
+                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow"><div class="fs-1 mb-2">💳</div><h6 class="fw-bold">Google Play $5.00</h6><button class="btn btn-outline-success fw-bold mt-auto" onclick="redeemGiftCard('Google Play $5', 5.0)">استبدال النقاط</button></div></div>
+                    <div class="col-md-3"><div class="card feature-card p-3 text-center h-100 shadow"><div class="fs-1 mb-2">🔥</div><h6 class="fw-bold">Free Fire Diamonds</h6><button class="btn btn-outline-danger fw-bold mt-auto" onclick="redeemGiftCard('Free Fire', 2.0)">شحن الآن</button></div></div>
                 </div>
             </div>
 
             <!-- السحب الحقيقي -->
             <div class="tab-pane fade" id="withdraw-tab">
-                <div class="card p-4 border-0 shadow-sm mx-auto" style="max-width: 600px;">
-                    <h4 class="fw-bold mb-3 text-center">💳 سحب الأرباح الفوري (حقيقي)</h4>
+                <div class="card p-4 border-0 shadow mx-auto feature-card" style="max-width: 600px;">
+                    <h4 class="fw-bold mb-3 text-center text-primary">💳 سحب الأرباح الفوري</h4>
                     <form id="withdrawForm">
                         <div class="mb-3">
                             <label class="form-label fw-bold">طريقة الدفع:</label>
@@ -160,13 +175,13 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">رقم المحفظة أو العنوان:</label>
-                            <input type="text" class="form-control" id="withdrawAddress" placeholder="أدخل بيانات محفظتك بدقة" required>
+                            <input type="text" class="form-control" id="withdrawAddress" placeholder="أدخل بيانات المحفظة بدقة" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-bold">المبلغ المطلوب ($):</label>
                             <input type="number" step="0.1" min="1" class="form-control" id="withdrawAmount" placeholder="0.00" required>
                         </div>
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow-sm">إرسال طلب السحب الحقيقي</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow">إرسال طلب السحب للشركة</button>
                     </form>
                 </div>
             </div>
@@ -175,14 +190,14 @@
 
     <!-- Modal المصادقة -->
     <div class="modal fade" id="authModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white border-secondary">
+                <div class="modal-header border-secondary">
                     <ul class="nav nav-tabs card-header-tabs w-100" id="authTab" role="tablist">
-                        <li class="nav-item w-50 text-center"><button class="nav-link active fw-bold w-100" data-bs-toggle="tab" data-bs-target="#login-panel" type="button">تسجيل الدخول</button></li>
-                        <li class="nav-item w-50 text-center"><button class="nav-link fw-bold w-100" data-bs-toggle="tab" data-bs-target="#signup-panel" type="button">حساب جديد</button></li>
+                        <li class="nav-item w-50 text-center"><button class="nav-link active fw-bold w-100 text-white" data-bs-toggle="tab" data-bs-target="#login-panel" type="button">تسجيل الدخول</button></li>
+                        <li class="nav-item w-50 text-center"><button class="nav-link fw-bold w-100 text-white" data-bs-toggle="tab" data-bs-target="#signup-panel" type="button">حساب جديد</button></li>
                     </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="tab-content">
@@ -192,7 +207,7 @@
                                 <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="loginEmail" class="form-control" required placeholder="Anassadek5535@gmail.com"></div>
                                 <div class="mb-3"><label class="form-label">كلمة السر</label><input type="password" id="loginPass" class="form-control" required placeholder="******"></div>
                                 <div class="mb-3 text-end"><a href="#" class="text-warning small text-decoration-none" onclick="forgotPassword()">نسيت كلمة السر؟</a></div>
-                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2">دخول النظام</button>
+                                <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow">دخول المنصة</button>
                             </form>
                         </div>
                         <!-- حساب جديد -->
@@ -201,7 +216,7 @@
                                 <div class="mb-3"><label class="form-label">اسم المستخدم</label><input type="text" id="signupUser" class="form-control" required placeholder="Anas"></div>
                                 <div class="mb-3"><label class="form-label">البريد الإلكتروني</label><input type="email" id="signupEmail" class="form-control" required placeholder="Anassadek5535@gmail.com"></div>
                                 <div class="mb-3"><label class="form-label">كلمة السر (6 أحرف فأكثر)</label><input type="password" id="signupPass" class="form-control" required minlength="6" placeholder="******"></div>
-                                <button type="submit" class="btn btn-success w-100 fw-bold py-2">إنشاء حساب فوري</button>
+                                <button type="submit" class="btn btn-success w-100 fw-bold py-2 shadow">إنشاء حساب فوري</button>
                             </form>
                         </div>
                     </div>
@@ -232,10 +247,10 @@
                 document.getElementById("logoutBtn").style.display = "inline";
                 document.getElementById("userBalanceContainer").style.display = "inline";
                 
-                // التمييز التلقائي لمالك ورئيس الموقع
+                // التمييز المؤسسي لرئيس المنصة
                 if (user.email.toLowerCase() === OWNER_EMAIL.toLowerCase()) {
                     document.getElementById("ownerConsoleBtn").style.display = "inline-block";
-                    document.getElementById("userRoleBadge").innerHTML = '<span class="owner-badge small">👑 رئيس الموقع</span>';
+                    document.getElementById("userRoleBadge").innerHTML = '<span class="ceo-badge small">👑 رئيس المنصة (CEO)</span>';
                 } else {
                     document.getElementById("ownerConsoleBtn").style.display = "none";
                     document.getElementById("userRoleBadge").innerHTML = '';
@@ -265,7 +280,7 @@
                 password: document.getElementById("loginPass").value
             });
             if (error) alert("❌ خطأ: " + error.message);
-            else { alert("✅ أهلاً بك! تم تسجيل الدخول بنجاح."); location.reload(); }
+            else { alert("✅ أهلاً بك سيادة الرئيس! تم تسجيل الدخول بنجاح."); location.reload(); }
         });
 
         // إنشاء حساب
@@ -294,7 +309,7 @@
             if (signInError) {
                 alert("🎉 تم إنشاء الحساب بنجاح!");
             } else {
-                alert("🎉 تم إنشاء الحساب وتسجيل دخولك تلقائياً!");
+                alert("🎉 تم إنشاء الحساب وتسجيل الدخول تلقائياً!");
                 location.reload();
             }
         });
@@ -319,7 +334,7 @@
             else { alert(`🎉 ${message} (+$${amount})`); updateAuthUI(); }
         }
 
-        function openLootBox() { addBalanceToUser(0.10, "صندوق الجوائز"); }
+        function openLootBox() { addBalanceToUser(0.10, "صندوق المفاجآت"); }
         function claimDailyBonus() { addBalanceToUser(0.05, "المكافأة اليومية"); }
         function spinLuckyWheel() { addBalanceToUser(0.10, "عجلة الحظ"); }
         function applyPromoCode() {
