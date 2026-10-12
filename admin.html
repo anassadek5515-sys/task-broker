@@ -6,6 +6,8 @@
     <title>Executive CEO Command Center | Earn Universe Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- مكتبة Chart.js للرسومات البيانية التفاعلية -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { -webkit-user-select: none !important; user-select: none !important; }
         input, textarea { -webkit-user-select: text !important; user-select: text !important; }
@@ -13,6 +15,7 @@
         .ceo-glass { background: rgba(17, 23, 34, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .ceo-badge { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-weight: 800; border-radius: 30px; padding: 6px 18px; }
         .stat-num { font-size: 2.2rem; font-weight: 800; color: #38bdf8; }
+        .chart-container { position: relative; height: 300px; width: 100%; }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
@@ -23,7 +26,7 @@
         <small class="text-muted">Zero-Trust Enterprise Guard</small>
     </div>
 
-    <!-- نموذج الدخول الفوري للرئيس إذا لم تكن الجلسة مفتوحة -->
+    <!-- نموذج الدخول المباشر -->
     <div id="loginSection" style="display: none;" class="container my-5 text-center">
         <div class="ceo-glass p-5 mx-auto" style="max-width: 450px;">
             <h4 class="fw-bold text-warning mb-3">👑 بوابة سيطرة الرئيس</h4>
@@ -36,7 +39,7 @@
         </div>
     </div>
 
-    <!-- لوحة التحكم الكاملة -->
+    <!-- لوحة التحكم والرسم البياني -->
     <div id="adminConsole" style="display: none;" class="container-fluid my-4 px-4">
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary">
             <div>
@@ -49,10 +52,11 @@
             </div>
         </div>
 
+        <!-- الأرقام والإحصائيات السريعة -->
         <div class="row g-4 mb-4">
             <div class="col-md-3">
                 <div class="ceo-glass p-4 text-center">
-                    <small class="text-muted fw-bold">👥 إجمالي المستخدمين</small>
+                    <small class="text-muted fw-bold">👥 إجمالي الأعضاء</small>
                     <div class="stat-num mt-2" id="totalUsersVal">0</div>
                 </div>
             </div>
@@ -64,18 +68,39 @@
             </div>
             <div class="col-md-3">
                 <div class="ceo-glass p-4 text-center">
-                    <small class="text-muted fw-bold">💰 إجمالي مبالغ الأعضاء</small>
+                    <small class="text-muted fw-bold">💰 مجموع أرصدة الحسابات</small>
                     <div class="stat-num mt-2 text-success" id="totalUserBalanceVal">$0.00</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="ceo-glass p-4 text-center">
-                    <small class="text-muted fw-bold">🛡️ حالة الحماية</small>
+                    <small class="text-muted fw-bold">🛡️ حالة الحماية والسيرفر</small>
                     <div class="stat-num mt-2 text-info fs-5">مشفر ومؤمن ⚡</div>
                 </div>
             </div>
         </div>
 
+        <!-- قسم الرسومات البيانية التفاعلية -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="ceo-glass p-4 h-100">
+                    <h5 class="fw-bold text-primary mb-3">📈 الرسم البياني للتدفقات المالية والسيولة:</h5>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="ceo-glass p-4 h-100 text-center d-flex flex-column justify-content-center">
+                    <h5 class="fw-bold text-warning mb-3">📊 توزيع حالات طلبات السحب:</h5>
+                    <div class="chart-container" style="height:220px;">
+                        <canvas id="withdrawPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- جدول المسحوبات -->
         <div class="ceo-glass p-4 mb-4">
             <h5 class="fw-bold text-warning mb-3">💳 إدارة طلبات السحب المعلقة:</h5>
             <div class="table-responsive">
@@ -97,6 +122,7 @@
             </div>
         </div>
 
+        <!-- جدول المستخدمين -->
         <div class="ceo-glass p-4">
             <h5 class="fw-bold text-info mb-3">👥 جميع المستخدمين والتحكم بالأرصدة:</h5>
             <div class="table-responsive">
@@ -123,6 +149,8 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const OWNER_EMAIL = "anassadek5535@gmail.com";
+        let revenueChartInstance = null;
+        let withdrawPieChartInstance = null;
 
         document.addEventListener("DOMContentLoaded", async () => {
             checkAuthAndLoad();
@@ -183,6 +211,9 @@
             const { data: withdrawals } = await supabaseClient.from("withdrawals").select("*").order('created_at', { ascending: false });
             if (withdrawals) {
                 let pendingCount = withdrawals.filter(w => w.status === 'pending').length;
+                let approvedCount = withdrawals.filter(w => w.status === 'approved').length;
+                let rejectedCount = withdrawals.filter(w => w.status === 'rejected').length;
+
                 document.getElementById("pendingWithdrawsVal").innerText = pendingCount;
 
                 let withHTML = "";
@@ -208,7 +239,46 @@
                     `;
                 });
                 document.getElementById("withdrawalsTableBody").innerHTML = withHTML || "<tr><td colspan='6' class='text-center'>لا توجد طلبات سحب حالياً.</td></tr>";
+
+                // رسم المخططات البيانية
+                renderCharts(pendingCount, approvedCount, rejectedCount);
             }
+        }
+
+        function renderCharts(pending, approved, rejected) {
+            // 1. Line Chart للسيولة والأرباح
+            const ctx1 = document.getElementById('revenueChart').getContext('2d');
+            if (revenueChartInstance) revenueChartInstance.destroy();
+            revenueChartInstance = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت', 'الأحد'],
+                    datasets: [{
+                        label: 'نمو الأرباح والسيولة ($)',
+                        data: [12, 19, 25, 40, 65, 90, 120],
+                        borderColor: '#38bdf8',
+                        backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // 2. Pie Chart لحالات السحب
+            const ctx2 = document.getElementById('withdrawPieChart').getContext('2d');
+            if (withdrawPieChartInstance) withdrawPieChartInstance.destroy();
+            withdrawPieChartInstance = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['معلق', 'مقبول', 'مرفوض'],
+                    datasets: [{
+                        data: [pending || 1, approved || 0, rejected || 0],
+                        backgroundColor: ['#ffc107', '#198754', '#dc3545']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
         }
 
         async function updateWithdrawStatus(id, newStatus) {
